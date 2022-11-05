@@ -16,7 +16,7 @@ void baseTabuleiro()
     glPopMatrix();
 }
 
-void escaques()
+void casas()
 {
     float x[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
     float y[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
@@ -49,7 +49,7 @@ void escaques()
 void tabuleiro()
 {
     baseTabuleiro();
-    escaques();
+    casas();
 }
 
 #endif

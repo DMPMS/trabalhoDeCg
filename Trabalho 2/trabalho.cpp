@@ -16,7 +16,7 @@ float eyeZ = 50.0f;
 float seletorX = 0.0f;
 float seletorY = 0.0f;
 
-bool pecaSelecionada = false;
+bool damaSelecionada = false;
 
 void timer(int);
 
@@ -62,43 +62,43 @@ void tecladoSpecial(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_RIGHT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER ESCAQUE DA COLUNA h.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h.
         if (4.0f + seletorX < 11.0f)
         {
             seletorX += 1.0f;
-            pecaSelecionada = false;
+            damaSelecionada = false;
         }
         break;
     case GLUT_KEY_LEFT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER ESCAQUE DA COLUNA a.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
         if (4.0f + seletorX > 4.0f)
         {
             seletorX -= 1.0f;
-            pecaSelecionada = false;
+            damaSelecionada = false;
         }
         break;
     case GLUT_KEY_UP:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER ESCAQUE DA LINHA 8.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
         if (4.0f + seletorY < 11.0f)
         {
             seletorY += 1.0f;
-            pecaSelecionada = false;
+            damaSelecionada = false;
         }
         break;
     case GLUT_KEY_DOWN:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER ESCAQUE DA LINHA 1.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1.
         if (4.0f + seletorY > 4.0f)
         {
             seletorY -= 1.0f;
-            pecaSelecionada = false;
+            damaSelecionada = false;
         }
         break;
     case GLUT_KEY_F1:
-        pecaSelecionada += -1;
+        damaSelecionada += -1;
         break;
     }
 
@@ -132,8 +132,8 @@ void desenha()
     baseDeMadeira();
     tabuleiro();
 
-    dama();
-    seletorDeDama(seletorX, seletorY, pecaSelecionada);
+    damas();
+    seletorDeDama(seletorX, seletorY, damaSelecionada);
 
     eixos();
 
