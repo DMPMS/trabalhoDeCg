@@ -16,7 +16,21 @@ float eyeZ = 50.0f;
 float seletorX = 0.0f;
 float seletorY = 0.0f;
 
-bool damaSelecionada = false;
+float damasJ1X[12] = {6.5f, 7.5f, 9.5f, 11.5f,
+                      4.5f, 6.5f, 8.5f, 10.5f,
+                      5.5f, 7.5f, 9.5f, 11.5f};
+float damasJ1Y[12] = {7.5f, 6.5f, 6.5f, 6.5f,
+                      5.5f, 5.5f, 5.5f, 5.5f,
+                      4.5f, 4.5f, 4.5f, 4.5f};
+
+float damasJ1Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
+                      1.625f, 1.625f, 1.625f, 1.625f,
+                      1.625f, 1.625f, 1.625f, 1.625f};
+
+bool damaSelecionada = true;
+
+bool moverDamaAnimacao = true;
+char moverDamaLado = 'D';
 
 void timer(int);
 
@@ -32,6 +46,7 @@ void inicio()
 
 void tecladoASCII(unsigned char key, int x, int y)
 {
+    // MOVER CÂMERA.
     switch (key)
     {
     case '7':
@@ -51,6 +66,19 @@ void tecladoASCII(unsigned char key, int x, int y)
         break;
     case '3':
         eyeZ -= 1.0f;
+        break;
+    }
+
+    // ESCOLHER PARA ONDE A DAMA VAI.
+    switch (key)
+    {
+    case 'e':
+    case 'E':
+        moverDamaAnimacao = true;
+        break;
+    case 'd':
+    case 'D':
+        moverDamaAnimacao = true;
         break;
     }
 
@@ -140,6 +168,33 @@ void desenha()
     glutSwapBuffers();
 }
 
+void moverDama()
+{
+    while (damasJ1Z[0] < 2.0f)
+    {
+        damasJ1Z[0] += 0.025f;
+        desenha();
+    }
+
+    while (damasJ1X[0] < 7.5 && damasJ1Y[0] < 8.5)
+    {
+        damasJ1X[0] += 0.01;
+        damasJ1Y[0] += 0.01;
+
+        desenha();
+    }
+
+    while (damasJ1Z[0] > 1.625f)
+    {
+        damasJ1Z[0] -= 0.025f;
+        desenha();
+    }
+
+    moverDamaAnimacao = false;
+    damasJ1X[0] = 7.5f; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+    damasJ1Y[0] = 8.5f; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+}
+
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
@@ -166,4 +221,9 @@ void timer(int)
 {
     glutPostRedisplay();
     glutTimerFunc(1000 / 144, timer, 0);
+
+    if (moverDamaAnimacao)
+    {
+        moverDama();
+    }
 }

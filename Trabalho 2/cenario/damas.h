@@ -4,12 +4,9 @@
 #include "../cubo.h"
 #include "../cilindro.h"
 
-float damasJ1X[12] = {6.5f, 7.5f, 9.5f, 11.5f,
-                      4.5f, 6.5f, 8.5f, 10.5f,
-                      5.5f, 7.5f, 9.5f, 11.5f};
-float damasJ1Y[12] = {7.5f, 6.5f, 6.5f, 6.5f,
-                      5.5f, 5.5f, 5.5f, 5.5f,
-                      4.5f, 4.5f, 4.5f, 4.5f};
+extern float damasJ1X[12];
+extern float damasJ1Y[12];
+extern float damasJ1Z[12];
 
 bool temDama(float seletorX, float seletorY)
 {
@@ -48,7 +45,7 @@ void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
             if (4.0f + seletorY < 11.0f)
             {
 
-                // ESQUERDA
+                // OPÇÃO DE MOVIMENDO PARA ESQUERDA
                 // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
                 // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
                 if (4.0f + seletorX > 4.0f) // PARA NÃO MOSTRAR OPÇÕES FORA DO TABULEIRO.
@@ -67,7 +64,7 @@ void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
                     }
                 }
 
-                // DIREITA
+                // OPÇÃO DE MOVIMENTO PARA DIREITA
                 // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
                 // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h.
                 if (4.0f + seletorX < 11.0f) // PARA NÃO MOSTRAR OPÇÕES FORA DO TABULEIRO.
@@ -92,12 +89,16 @@ void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
 
 void damas()
 {
-
     for (int i = 0; i < 12; i++)
     {
         glPushMatrix();
 
-        glTranslatef(damasJ1X[i], damasJ1Y[i], 1.625f);
+        // if (i == 4)
+        // {
+        //     glTranslatef(0.0f, 0.0f, 3.0f);
+        // }
+
+        glTranslatef(damasJ1X[i], damasJ1Y[i], damasJ1Z[i]);
         glScalef(0.4f, 0.4f, 0.125f);
         cilindro(100, 100, 255, 255, GL_FILL);
 
