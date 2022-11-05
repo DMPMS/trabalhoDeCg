@@ -16,10 +16,10 @@ float eyeZ = 50.0f;
 float seletorX = 0.0f;
 float seletorY = 0.0f;
 
-float damasJ1X[12] = {6.5f, 7.5f, 9.5f, 11.5f,
+float damasJ1X[12] = {5.5f, 7.5f, 9.5f, 11.5f,
                       4.5f, 6.5f, 8.5f, 10.5f,
                       5.5f, 7.5f, 9.5f, 11.5f};
-float damasJ1Y[12] = {7.5f, 6.5f, 6.5f, 6.5f,
+float damasJ1Y[12] = {6.5f, 6.5f, 6.5f, 6.5f,
                       5.5f, 5.5f, 5.5f, 5.5f,
                       4.5f, 4.5f, 4.5f, 4.5f};
 
@@ -29,8 +29,8 @@ float damasJ1Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
 
 bool damaSelecionada = true;
 
-bool moverDamaAnimacao = true;
-char moverDamaLado = 'D';
+bool moverDamaAnimacao = false;
+char moverDamaLado = 'E';
 
 void timer(int);
 
@@ -74,11 +74,19 @@ void tecladoASCII(unsigned char key, int x, int y)
     {
     case 'e':
     case 'E':
-        moverDamaAnimacao = true;
+        if (podeIrPraEsquerda(seletorX, seletorY) && damaSelecionada)
+        {
+            moverDamaLado = 'E';
+            moverDamaAnimacao = true;
+        }
         break;
     case 'd':
     case 'D':
-        moverDamaAnimacao = true;
+        if (podeIrPraDireita(seletorX, seletorY) && damaSelecionada)
+        {
+            moverDamaLado = 'D';
+            moverDamaAnimacao = true;
+        }
         break;
     }
 
@@ -170,29 +178,62 @@ void desenha()
 
 void moverDama()
 {
-    while (damasJ1Z[0] < 2.0f)
+    // PARA SELECIONAR A DAMA QUE ESTÁ NA MESMA CASA DO SELETOR DE DAMAS.
+    for (int i = 0; i < 12; i++)
     {
-        damasJ1Z[0] += 0.025f;
-        desenha();
+        if (4.5f + seletorX == damasJ1X[i] && 4.5f + seletorY == damasJ1Y[i])
+        {
+            float damasJ1Y_Destino = damasJ1Y[i] + 1.0f;
+
+            float damasJ1X_Destino;
+            if (moverDamaLado == 'E') // VERIFICANDO SE A DAMA VAI PARA ESQUERDA OU DIREITA.
+            {
+                damasJ1X_Destino = damasJ1X[i] - 1.0f;
+            }
+            else if (moverDamaLado == 'D')
+            {
+                damasJ1X_Destino = damasJ1X[i] + 1.0f;
+            }
+
+            while (damasJ1Z[i] < 2.0f) // LEVANTAR DAMA
+            {
+                damasJ1Z[i] += 0.025f;
+                desenha();
+            }
+
+            // A AÇÃO DE INCREMENTAR/DECREMENTAR DEPENDERÁ SE A DAMA VAI PARA ESQUERDA OU DIREITA.
+            if (damasJ1X[i] < damasJ1X_Destino)
+            {
+                while (damasJ1X[i] < damasJ1X_Destino && damasJ1Y[i] < damasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    damasJ1X[i] += 0.01;
+                    damasJ1Y[i] += 0.01;
+
+                    desenha();
+                }
+            }
+            else if (damasJ1X[i] > damasJ1X_Destino)
+            {
+                while (damasJ1X[i] > damasJ1X_Destino && damasJ1Y[i] < damasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    damasJ1X[i] -= 0.01;
+                    damasJ1Y[i] += 0.01;
+
+                    desenha();
+                }
+            }
+
+            while (damasJ1Z[i] > 1.625f) // BAIXAR DAMA.
+            {
+                damasJ1Z[i] -= 0.025f;
+                desenha();
+            }
+
+            moverDamaAnimacao = false;
+            damasJ1X[i] = damasJ1X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+            damasJ1Y[i] = damasJ1Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+        }
     }
-
-    while (damasJ1X[0] < 7.5 && damasJ1Y[0] < 8.5)
-    {
-        damasJ1X[0] += 0.01;
-        damasJ1Y[0] += 0.01;
-
-        desenha();
-    }
-
-    while (damasJ1Z[0] > 1.625f)
-    {
-        damasJ1Z[0] -= 0.025f;
-        desenha();
-    }
-
-    moverDamaAnimacao = false;
-    damasJ1X[0] = 7.5f; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
-    damasJ1Y[0] = 8.5f; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
 }
 
 int main(int argc, char **argv)

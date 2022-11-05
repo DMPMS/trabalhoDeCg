@@ -24,6 +24,56 @@ bool temDama(float seletorX, float seletorY)
     return false;
 }
 
+bool podeIrPraEsquerda(float seletorX, float seletorY)
+{
+    if (temDama(seletorX, seletorY)) // SE EXISTE UMA DAMA NO LOCAL QUE O SELETOR SELECIONOU.
+    {
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
+        if (!(4.0f + seletorY < 11.0f)) // SE NÃO HÁ MAIS CASAS POSSÍVEIS PARA A DAMA CONTINUAR 'SUBINDO' NO TABULEIRO.
+        {
+            return false;
+        }
+
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
+        if (4.0f + seletorX > 4.0f) // SE FOR UMA CASA DO TABULEIRO.
+        {
+            if (!temDama(seletorX - 1.0f, seletorY + 1.0f)) // SE NÃO EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool podeIrPraDireita(float seletorX, float seletorY)
+{
+    if (temDama(seletorX, seletorY)) // SE EXISTE UMA DAMA NO LOCAL QUE O SELETOR SELECIONOU.
+    {
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
+        if (!(4.0f + seletorY < 11.0f)) // SE NÃO HÁ MAIS CASAS POSSÍVEIS PARA A DAMA CONTINUAR 'SUBINDO' NO TABULEIRO.
+        {
+            return false;
+        }
+
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
+        if (4.0f + seletorX < 11.0f) // SE FOR UMA CASA DO TABULEIRO.
+        {
+            if (!temDama(seletorX + 1.0f, seletorY + 1.0f)) // SE NÃO EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
 {
     glPushMatrix();
@@ -42,15 +92,14 @@ void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
         {
             // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
             // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
-            if (4.0f + seletorY < 11.0f)
+            if (4.0f + seletorY < 11.0f) // VERIFICA SE AINDA HÁ CASAS POSSÍVEIS PARA A DAMA CONTINUAR 'SUBINDO' NO TABULEIRO.
             {
-
                 // OPÇÃO DE MOVIMENDO PARA ESQUERDA
                 // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
                 // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
                 if (4.0f + seletorX > 4.0f) // PARA NÃO MOSTRAR OPÇÕES FORA DO TABULEIRO.
                 {
-                    if (!temDama(seletorX - 1.0f, seletorY + 1.0f)) // SE EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
+                    if (!temDama(seletorX - 1.0f, seletorY + 1.0f)) // SE NÃO EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
                     {
                         glPushMatrix();
 
@@ -69,7 +118,7 @@ void seletorDeDama(float seletorX, float seletorY, bool damaSelecionada)
                 // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h.
                 if (4.0f + seletorX < 11.0f) // PARA NÃO MOSTRAR OPÇÕES FORA DO TABULEIRO.
                 {
-                    if (!temDama(seletorX + 1.0f, seletorY + 1.0f)) // SE EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
+                    if (!temDama(seletorX + 1.0f, seletorY + 1.0f)) // SE NÃO EXISTE OUTRA DAMA NA OPÇÃO DE MOVIMENTO DA DAMA SELECIONADA.
                     {
                         glPushMatrix();
 
@@ -92,11 +141,6 @@ void damas()
     for (int i = 0; i < 12; i++)
     {
         glPushMatrix();
-
-        // if (i == 4)
-        // {
-        //     glTranslatef(0.0f, 0.0f, 3.0f);
-        // }
 
         glTranslatef(damasJ1X[i], damasJ1Y[i], damasJ1Z[i]);
         glScalef(0.4f, 0.4f, 0.125f);
