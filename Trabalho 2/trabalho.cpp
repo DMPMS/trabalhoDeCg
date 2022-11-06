@@ -9,10 +9,12 @@
 
 #include "stdbool.h"
 
-float eyeX = 15.0f;
+float eyeX = 0.0f;
+// float eyeX = 8.0f;
 float eyeY = -50.0f;
-float eyeZ = 50.0f;
+float eyeZ = 70.0f;
 
+// PARA MOVIMENTAÇÃO DO SELETOR DE DAMA.
 float seletorX = 0.0f;
 float seletorY = 0.0f;
 
@@ -22,15 +24,26 @@ float damasJ1X[12] = {5.5f, 7.5f, 9.5f, 11.5f,
 float damasJ1Y[12] = {6.5f, 6.5f, 6.5f, 6.5f,
                       5.5f, 5.5f, 5.5f, 5.5f,
                       4.5f, 4.5f, 4.5f, 4.5f};
-
 float damasJ1Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f};
 
-bool damaSelecionada = true;
+float damasJ2X[12] = {10.5f, 8.5f, 6.5f, 4.5f,
+                      11.5f, 9.5f, 7.5f, 5.5f,
+                      10.5f, 8.5f, 6.5f, 4.5f};
+float damasJ2Y[12] = {11.5f, 11.5f, 11.5f, 11.5f,
+                      10.5f, 10.5f, 10.5f, 10.5f,
+                      9.5f, 9.5f, 9.5f, 9.5f};
+float damasJ2Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
+                      1.625f, 1.625f, 1.625f, 1.625f,
+                      1.625f, 1.625f, 1.625f, 1.625f};
 
-bool moverDamaAnimacao = false;
-char moverDamaLado = 'E';
+bool damaSelecionada = true;    // PARA EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA DAMA.
+bool moverDamaAnimacao = false; // PARA INDICAR SE A ANIMAÇÃO DO MOVIMENTO DA DAMA FOI FINALIZADA.
+char moverDamaLado;             // PARA DEFINIR SE A DAMA VAI PARA ESQUERDA OU DIREITA.
+
+float moverCameraAnimacao = false;
+float moverCameraAux = 1.0f;
 
 void timer(int);
 
@@ -74,7 +87,8 @@ void tecladoASCII(unsigned char key, int x, int y)
     {
     case 'e':
     case 'E':
-        if (podeIrPraEsquerda(seletorX, seletorY) && damaSelecionada)
+        // temDamaNaCasa(seletorX, seletorY) RETORNARÁ SE HÁ UMA DAMA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE DAMA.
+        if (podeIrPraEsquerda(seletorX, seletorY) && damaSelecionada && temDamaNaCasa(seletorX, seletorY))
         {
             moverDamaLado = 'E';
             moverDamaAnimacao = true;
@@ -82,7 +96,8 @@ void tecladoASCII(unsigned char key, int x, int y)
         break;
     case 'd':
     case 'D':
-        if (podeIrPraDireita(seletorX, seletorY) && damaSelecionada)
+        // temDamaNaCasa(seletorX, seletorY) RETORNARÁ SE HÁ UMA DAMA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE DAMA.
+        if (podeIrPraDireita(seletorX, seletorY) && damaSelecionada && temDamaNaCasa(seletorX, seletorY))
         {
             moverDamaLado = 'D';
             moverDamaAnimacao = true;
@@ -134,7 +149,7 @@ void tecladoSpecial(int key, int x, int y)
         }
         break;
     case GLUT_KEY_F1:
-        damaSelecionada += -1;
+        damaSelecionada += -1; // HABILITA A EXIBIÇÃO DAS OPÇÕES DE MOVIMENTO DA DAMA SELECIONADA.
         break;
     }
 
@@ -171,7 +186,7 @@ void desenha()
     damas();
     seletorDeDama(seletorX, seletorY, damaSelecionada);
 
-    eixos();
+    // eixos();
 
     glutSwapBuffers();
 }
@@ -195,7 +210,7 @@ void moverDama()
                 damasJ1X_Destino = damasJ1X[i] + 1.0f;
             }
 
-            while (damasJ1Z[i] < 2.0f) // LEVANTAR DAMA
+            while (damasJ1Z[i] < 2.0f) // LEVANTAR A DAMA
             {
                 damasJ1Z[i] += 0.025f;
                 desenha();
@@ -223,17 +238,41 @@ void moverDama()
                 }
             }
 
-            while (damasJ1Z[i] > 1.625f) // BAIXAR DAMA.
+            while (damasJ1Z[i] > 1.625f) // DESCER A DAMA.
             {
                 damasJ1Z[i] -= 0.025f;
                 desenha();
             }
 
+            moverCameraAnimacao = true;
             moverDamaAnimacao = false;
             damasJ1X[i] = damasJ1X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
             damasJ1Y[i] = damasJ1Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
         }
     }
+}
+
+void moverCamera()
+{
+    if (moverCameraAux == 1.0f)
+    {
+        while (eyeY != 66.0f)
+        {
+            eyeY += moverCameraAux;
+            desenha();
+        }
+    }
+    else
+    {
+        while (eyeY != -50.0f)
+        {
+            eyeY += moverCameraAux;
+            desenha();
+        }
+    }
+
+    moverCameraAux *= -1.0f;
+    moverCameraAnimacao = false;
 }
 
 int main(int argc, char **argv)
@@ -267,4 +306,9 @@ void timer(int)
     {
         moverDama();
     }
+
+    // if (moverCameraAnimacao)
+    // {
+    //     moverCamera();
+    // }
 }

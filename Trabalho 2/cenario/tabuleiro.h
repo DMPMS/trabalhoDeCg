@@ -1,7 +1,7 @@
 #ifndef TABULEIRO
 #define TABULEIRO
 
-#include "../cubo.h"
+#include "../formasGeometricas/cubo.h"
 
 void baseTabuleiro()
 {

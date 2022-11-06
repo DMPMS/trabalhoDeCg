@@ -1,7 +1,7 @@
 #ifndef BASEDEMADEIRA
 #define BASEDEMADEIRA
 
-#include "../cubo.h"
+#include "../formasGeometricas/cubo.h"
 
 void baseDeMadeira()
 {
