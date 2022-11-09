@@ -5,7 +5,7 @@
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
-#include "cenario/pecas.h"
+#include "cenario/pecasJ1.h"
 
 #include "stdbool.h"
 
@@ -37,6 +37,9 @@ float pecasJ2Y[12] = {11.5f, 11.5f, 11.5f, 11.5f,
 float pecasJ2Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f};
+
+int damasJ1[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int damasJ2[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 bool pecaSelecionada = true;    // PARA EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
 bool moverPecaAnimacao = false; // PARA INDICAR SE A ANIMAÇÃO DO MOVIMENTO DA PEÇA FOI FINALIZADA.
@@ -86,18 +89,32 @@ void tecladoASCII(unsigned char key, int x, int y)
     switch (key)
     {
     case 'e':
+        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+        if (ehUmaDama(seletorJ1X, seletorJ1Y) && podeIrPraBaixo(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        {
+            moverPecaLado = 'e';
+            moverPecaAnimacao = true;
+        }
+        break;
     case 'E':
         // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (podeIrPraEsquerda(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (podeIrPraCima(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
         {
             moverPecaLado = 'E';
             moverPecaAnimacao = true;
         }
         break;
     case 'd':
+        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+        if (ehUmaDama(seletorJ1X, seletorJ1Y) && podeIrPraBaixo(seletorJ1X, seletorJ1Y) && podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        {
+            moverPecaLado = 'd';
+            moverPecaAnimacao = true;
+        }
+        break;
     case 'D':
         // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (podeIrPraDireita(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (podeIrPraCima(seletorJ1X, seletorJ1Y) && podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
         {
             moverPecaLado = 'D';
             moverPecaAnimacao = true;
@@ -114,7 +131,7 @@ void tecladoSpecial(int key, int x, int y)
     {
     case GLUT_KEY_RIGHT:
         // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h.
+        // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
         if (4.0f + seletorJ1X < 11.0f)
         {
             seletorJ1X += 1.0f;
@@ -123,7 +140,7 @@ void tecladoSpecial(int key, int x, int y)
         break;
     case GLUT_KEY_LEFT:
         // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
         if (4.0f + seletorJ1X > 4.0f)
         {
             seletorJ1X -= 1.0f;
@@ -132,7 +149,7 @@ void tecladoSpecial(int key, int x, int y)
         break;
     case GLUT_KEY_UP:
         // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
+        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8 (CONSULTAR NOTAÇÃO ALGÉBRICA).
         if (4.0f + seletorJ1Y < 11.0f)
         {
             seletorJ1Y += 1.0f;
@@ -141,7 +158,7 @@ void tecladoSpecial(int key, int x, int y)
         break;
     case GLUT_KEY_DOWN:
         // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1 (CONSULTAR NOTAÇÃO ALGÉBRICA).
         if (4.0f + seletorJ1Y > 4.0f)
         {
             seletorJ1Y -= 1.0f;
@@ -198,16 +215,28 @@ void moverPeca()
     {
         if (4.5f + seletorJ1X == pecasJ1X[i] && 4.5f + seletorJ1Y == pecasJ1Y[i])
         {
-            float pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
-
+            float pecasJ1Y_Destino;
             float pecasJ1X_Destino;
-            if (moverPecaLado == 'E') // VERIFICANDO SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
+
+            if (moverPecaLado == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] - 1.0f;
+                pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
             }
-            else if (moverPecaLado == 'D')
+            else if (moverPecaLado == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
+            {
+                pecasJ1X_Destino = pecasJ1X[i] - 1.0f;
+                pecasJ1Y_Destino = pecasJ1Y[i] - 1.0f;
+            }
+            else if (moverPecaLado == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] + 1.0f;
+                pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
+            }
+            else if (moverPecaLado == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
+            {
+                pecasJ1X_Destino = pecasJ1X[i] + 1.0f;
+                pecasJ1Y_Destino = pecasJ1Y[i] - 1.0f;
             }
 
             while (pecasJ1Z[i] < 2.0f) // LEVANTAR A PEÇA
@@ -216,8 +245,27 @@ void moverPeca()
                 desenha();
             }
 
-            // A AÇÃO DE INCREMENTAR/DECREMENTAR DEPENDERÁ SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
-            if (pecasJ1X[i] < pecasJ1X_Destino)
+            if (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // PEÇA IRÁ PARA A ESQUERDA SUPERIOR.
+            {
+                while (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ1X[i] -= 0.01;
+                    pecasJ1Y[i] += 0.01;
+
+                    desenha();
+                }
+            }
+            else if (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] > pecasJ1Y_Destino) // PEÇA IRÁ PARA A ESQUERDA INFERIOR.
+            {
+                while (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] > pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ1X[i] -= 0.01;
+                    pecasJ1Y[i] -= 0.01;
+
+                    desenha();
+                }
+            }
+            else if (pecasJ1X[i] < pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // PEÇA IRÁ PARA DIREITA SUPERIOR.
             {
                 while (pecasJ1X[i] < pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
@@ -227,12 +275,12 @@ void moverPeca()
                     desenha();
                 }
             }
-            else if (pecasJ1X[i] > pecasJ1X_Destino)
+            else if (pecasJ1X[i] < pecasJ1X_Destino && pecasJ1Y[i] > pecasJ1Y_Destino) // PEÇA IRÁ PARA DIREITA INFERIOR.
             {
-                while (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                while (pecasJ1X[i] < pecasJ1X_Destino && pecasJ1Y[i] > pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecasJ1X[i] -= 0.01;
-                    pecasJ1Y[i] += 0.01;
+                    pecasJ1X[i] += 0.01;
+                    pecasJ1Y[i] -= 0.01;
 
                     desenha();
                 }
@@ -246,6 +294,12 @@ void moverPeca()
 
             moverCameraAnimacao = true;
             moverPecaAnimacao = false;
+
+            if (pecasJ1Y_Destino == 11.5f) // 11.5f É A ÚLTIMA CASA DO TABULEIRO DE DAMA PARA O JOGADOR 1.
+            {
+                damasJ1[i] = 1; // TRANSFORMANDO A PEÇA EM DAMA.
+            }
+
             pecasJ1X[i] = pecasJ1X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
             pecasJ1Y[i] = pecasJ1Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
         }
