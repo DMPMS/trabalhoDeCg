@@ -5,7 +5,7 @@
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
-#include "cenario/damas.h"
+#include "cenario/pecas.h"
 
 #include "stdbool.h"
 
@@ -14,33 +14,33 @@ float eyeX = 0.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
 
-// PARA MOVIMENTAÇÃO DO SELETOR DE DAMA.
-float seletorX = 0.0f;
-float seletorY = 0.0f;
+// PARA MOVIMENTAÇÃO DO SELETOR DE PEÇA.
+float seletorJ1X = 0.0f;
+float seletorJ1Y = 0.0f;
 
-float damasJ1X[12] = {5.5f, 7.5f, 9.5f, 11.5f,
+float pecasJ1X[12] = {5.5f, 7.5f, 9.5f, 11.5f,
                       4.5f, 6.5f, 8.5f, 10.5f,
                       5.5f, 7.5f, 9.5f, 11.5f};
-float damasJ1Y[12] = {6.5f, 6.5f, 6.5f, 6.5f,
+float pecasJ1Y[12] = {6.5f, 6.5f, 6.5f, 6.5f,
                       5.5f, 5.5f, 5.5f, 5.5f,
                       4.5f, 4.5f, 4.5f, 4.5f};
-float damasJ1Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
+float pecasJ1Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f};
 
-float damasJ2X[12] = {10.5f, 8.5f, 6.5f, 4.5f,
+float pecasJ2X[12] = {10.5f, 8.5f, 6.5f, 4.5f,
                       11.5f, 9.5f, 7.5f, 5.5f,
                       10.5f, 8.5f, 6.5f, 4.5f};
-float damasJ2Y[12] = {11.5f, 11.5f, 11.5f, 11.5f,
+float pecasJ2Y[12] = {11.5f, 11.5f, 11.5f, 11.5f,
                       10.5f, 10.5f, 10.5f, 10.5f,
                       9.5f, 9.5f, 9.5f, 9.5f};
-float damasJ2Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
+float pecasJ2Z[12] = {1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f,
                       1.625f, 1.625f, 1.625f, 1.625f};
 
-bool damaSelecionada = true;    // PARA EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA DAMA.
-bool moverDamaAnimacao = false; // PARA INDICAR SE A ANIMAÇÃO DO MOVIMENTO DA DAMA FOI FINALIZADA.
-char moverDamaLado;             // PARA DEFINIR SE A DAMA VAI PARA ESQUERDA OU DIREITA.
+bool pecaSelecionada = true;    // PARA EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
+bool moverPecaAnimacao = false; // PARA INDICAR SE A ANIMAÇÃO DO MOVIMENTO DA PEÇA FOI FINALIZADA.
+char moverPecaLado;             // PARA DEFINIR SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
 
 float moverCameraAnimacao = false;
 float moverCameraAux = 1.0f;
@@ -82,25 +82,25 @@ void tecladoASCII(unsigned char key, int x, int y)
         break;
     }
 
-    // ESCOLHER PARA ONDE A DAMA VAI.
+    // ESCOLHER PARA ONDE A PEÇA VAI.
     switch (key)
     {
     case 'e':
     case 'E':
-        // temDamaNaCasa(seletorX, seletorY) RETORNARÁ SE HÁ UMA DAMA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE DAMA.
-        if (podeIrPraEsquerda(seletorX, seletorY) && damaSelecionada && temDamaNaCasa(seletorX, seletorY))
+        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+        if (podeIrPraEsquerda(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
         {
-            moverDamaLado = 'E';
-            moverDamaAnimacao = true;
+            moverPecaLado = 'E';
+            moverPecaAnimacao = true;
         }
         break;
     case 'd':
     case 'D':
-        // temDamaNaCasa(seletorX, seletorY) RETORNARÁ SE HÁ UMA DAMA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE DAMA.
-        if (podeIrPraDireita(seletorX, seletorY) && damaSelecionada && temDamaNaCasa(seletorX, seletorY))
+        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+        if (podeIrPraDireita(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
         {
-            moverDamaLado = 'D';
-            moverDamaAnimacao = true;
+            moverPecaLado = 'D';
+            moverPecaAnimacao = true;
         }
         break;
     }
@@ -113,43 +113,43 @@ void tecladoSpecial(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_RIGHT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
         // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h.
-        if (4.0f + seletorX < 11.0f)
+        if (4.0f + seletorJ1X < 11.0f)
         {
-            seletorX += 1.0f;
-            damaSelecionada = false;
+            seletorJ1X += 1.0f;
+            pecaSelecionada = false;
         }
         break;
     case GLUT_KEY_LEFT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
         // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a.
-        if (4.0f + seletorX > 4.0f)
+        if (4.0f + seletorJ1X > 4.0f)
         {
-            seletorX -= 1.0f;
-            damaSelecionada = false;
+            seletorJ1X -= 1.0f;
+            pecaSelecionada = false;
         }
         break;
     case GLUT_KEY_UP:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
         // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8.
-        if (4.0f + seletorY < 11.0f)
+        if (4.0f + seletorJ1Y < 11.0f)
         {
-            seletorY += 1.0f;
-            damaSelecionada = false;
+            seletorJ1Y += 1.0f;
+            pecaSelecionada = false;
         }
         break;
     case GLUT_KEY_DOWN:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE DAMAS.
+        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
         // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1.
-        if (4.0f + seletorY > 4.0f)
+        if (4.0f + seletorJ1Y > 4.0f)
         {
-            seletorY -= 1.0f;
-            damaSelecionada = false;
+            seletorJ1Y -= 1.0f;
+            pecaSelecionada = false;
         }
         break;
     case GLUT_KEY_F1:
-        damaSelecionada += -1; // HABILITA A EXIBIÇÃO DAS OPÇÕES DE MOVIMENTO DA DAMA SELECIONADA.
+        pecaSelecionada += -1; // HABILITA A EXIBIÇÃO DAS OPÇÕES DE MOVIMENTO DA PEÇA SELECIONADA.
         break;
     }
 
@@ -183,71 +183,71 @@ void desenha()
     baseDeMadeira();
     tabuleiro();
 
-    damas();
-    seletorDeDama(seletorX, seletorY, damaSelecionada);
+    pecas();
+    seletorDePeca(seletorJ1X, seletorJ1Y, pecaSelecionada);
 
     // eixos();
 
     glutSwapBuffers();
 }
 
-void moverDama()
+void moverPeca()
 {
-    // PARA SELECIONAR A DAMA QUE ESTÁ NA MESMA CASA DO SELETOR DE DAMAS.
+    // PARA SELECIONAR A PEÇA QUE ESTÁ NA MESMA CASA DO SELETOR DE PEÇAS.
     for (int i = 0; i < 12; i++)
     {
-        if (4.5f + seletorX == damasJ1X[i] && 4.5f + seletorY == damasJ1Y[i])
+        if (4.5f + seletorJ1X == pecasJ1X[i] && 4.5f + seletorJ1Y == pecasJ1Y[i])
         {
-            float damasJ1Y_Destino = damasJ1Y[i] + 1.0f;
+            float pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
 
-            float damasJ1X_Destino;
-            if (moverDamaLado == 'E') // VERIFICANDO SE A DAMA VAI PARA ESQUERDA OU DIREITA.
+            float pecasJ1X_Destino;
+            if (moverPecaLado == 'E') // VERIFICANDO SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
             {
-                damasJ1X_Destino = damasJ1X[i] - 1.0f;
+                pecasJ1X_Destino = pecasJ1X[i] - 1.0f;
             }
-            else if (moverDamaLado == 'D')
+            else if (moverPecaLado == 'D')
             {
-                damasJ1X_Destino = damasJ1X[i] + 1.0f;
+                pecasJ1X_Destino = pecasJ1X[i] + 1.0f;
             }
 
-            while (damasJ1Z[i] < 2.0f) // LEVANTAR A DAMA
+            while (pecasJ1Z[i] < 2.0f) // LEVANTAR A PEÇA
             {
-                damasJ1Z[i] += 0.025f;
+                pecasJ1Z[i] += 0.025f;
                 desenha();
             }
 
-            // A AÇÃO DE INCREMENTAR/DECREMENTAR DEPENDERÁ SE A DAMA VAI PARA ESQUERDA OU DIREITA.
-            if (damasJ1X[i] < damasJ1X_Destino)
+            // A AÇÃO DE INCREMENTAR/DECREMENTAR DEPENDERÁ SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
+            if (pecasJ1X[i] < pecasJ1X_Destino)
             {
-                while (damasJ1X[i] < damasJ1X_Destino && damasJ1Y[i] < damasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                while (pecasJ1X[i] < pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    damasJ1X[i] += 0.01;
-                    damasJ1Y[i] += 0.01;
+                    pecasJ1X[i] += 0.01;
+                    pecasJ1Y[i] += 0.01;
 
                     desenha();
                 }
             }
-            else if (damasJ1X[i] > damasJ1X_Destino)
+            else if (pecasJ1X[i] > pecasJ1X_Destino)
             {
-                while (damasJ1X[i] > damasJ1X_Destino && damasJ1Y[i] < damasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                while (pecasJ1X[i] > pecasJ1X_Destino && pecasJ1Y[i] < pecasJ1Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    damasJ1X[i] -= 0.01;
-                    damasJ1Y[i] += 0.01;
+                    pecasJ1X[i] -= 0.01;
+                    pecasJ1Y[i] += 0.01;
 
                     desenha();
                 }
             }
 
-            while (damasJ1Z[i] > 1.625f) // DESCER A DAMA.
+            while (pecasJ1Z[i] > 1.625f) // DESCER A PEÇA.
             {
-                damasJ1Z[i] -= 0.025f;
+                pecasJ1Z[i] -= 0.025f;
                 desenha();
             }
 
             moverCameraAnimacao = true;
-            moverDamaAnimacao = false;
-            damasJ1X[i] = damasJ1X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
-            damasJ1Y[i] = damasJ1Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+            moverPecaAnimacao = false;
+            pecasJ1X[i] = pecasJ1X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+            pecasJ1Y[i] = pecasJ1Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
         }
     }
 }
@@ -302,9 +302,9 @@ void timer(int)
     glutPostRedisplay();
     glutTimerFunc(1000 / 144, timer, 0);
 
-    if (moverDamaAnimacao)
+    if (moverPecaAnimacao)
     {
-        moverDama();
+        moverPeca();
     }
 
     // if (moverCameraAnimacao)
