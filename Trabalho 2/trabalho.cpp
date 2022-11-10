@@ -6,17 +6,20 @@
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
 #include "cenario/pecasJ1.h"
+#include "cenario/pecasJ2.h"
 
 #include "stdbool.h"
 
 float eyeX = 0.0f;
-// float eyeX = 8.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
 
 // PARA MOVIMENTAÇÃO DO SELETOR DE PEÇA.
 float seletorJ1X = 0.0f;
 float seletorJ1Y = 0.0f;
+
+float seletorJ2X = 0.0f;
+float seletorJ2Y = 0.0f;
 
 float pecasJ1X[12] = {5.5f, 7.5f, 9.5f, 11.5f,
                       4.5f, 6.5f, 8.5f, 10.5f,
@@ -43,7 +46,9 @@ int damasJ2[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 bool pecaSelecionada = true;    // PARA EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
 bool moverPecaAnimacao = false; // PARA INDICAR SE A ANIMAÇÃO DO MOVIMENTO DA PEÇA FOI FINALIZADA.
-char moverPecaLado;             // PARA DEFINIR SE A PEÇA VAI PARA ESQUERDA OU DIREITA.
+char moverPecaDirecao;          // PARA DEFINIR SE A PEÇA VAI PARA ESQUERDA OU DIREITA, SUPERIOR OU INFERIOR.
+
+int jogadorDaVez = 1; // JOGADOR 1 = 1. JOGADOR 2 = -1;
 
 float moverCameraAnimacao = false;
 float moverCameraAux = 1.0f;
@@ -89,35 +94,83 @@ void tecladoASCII(unsigned char key, int x, int y)
     switch (key)
     {
     case 'e':
-        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (ehUmaDama(seletorJ1X, seletorJ1Y) && podeIrPraBaixo(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (jogadorDaVez == 1)
         {
-            moverPecaLado = 'e';
-            moverPecaAnimacao = true;
+            // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (ehUmaDamaJ1(seletorJ1X, seletorJ1Y) && podeIrPraBaixoJ1(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaInferiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            {
+                moverPecaDirecao = 'e';
+                moverPecaAnimacao = true;
+            }
+        }
+        else
+        {
+            // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (podeIrPraBaixoJ2(seletorJ2X, seletorJ2Y) && podeIrPraEsquerdaInferiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            {
+                moverPecaDirecao = 'e';
+                moverPecaAnimacao = true;
+            }
         }
         break;
     case 'E':
-        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (podeIrPraCima(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (jogadorDaVez == 1)
         {
-            moverPecaLado = 'E';
-            moverPecaAnimacao = true;
+            // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (podeIrPraCimaJ1(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaSuperiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            {
+                moverPecaDirecao = 'E';
+                moverPecaAnimacao = true;
+            }
+        }
+        else
+        {
+            // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (podeIrPraCimaJ2(seletorJ2X, seletorJ2Y) && podeIrPraEsquerdaSuperiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            {
+                moverPecaDirecao = 'E';
+                moverPecaAnimacao = true;
+            }
         }
         break;
     case 'd':
-        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (ehUmaDama(seletorJ1X, seletorJ1Y) && podeIrPraBaixo(seletorJ1X, seletorJ1Y) && podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (jogadorDaVez == 1)
         {
-            moverPecaLado = 'd';
-            moverPecaAnimacao = true;
+            // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (ehUmaDamaJ1(seletorJ1X, seletorJ1Y) && podeIrPraBaixoJ1(seletorJ1X, seletorJ1Y) && podeIrPraDireitaInferiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            {
+                moverPecaDirecao = 'd';
+                moverPecaAnimacao = true;
+            }
+        }
+        else
+        {
+            // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (ehUmaDamaJ2(seletorJ2X, seletorJ2Y) && podeIrPraBaixoJ2(seletorJ2X, seletorJ2Y) && podeIrPraDireitaInferiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            {
+                moverPecaDirecao = 'd';
+                moverPecaAnimacao = true;
+            }
         }
         break;
     case 'D':
-        // temPecaNaCasa(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-        if (podeIrPraCima(seletorJ1X, seletorJ1Y) && podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasa(seletorJ1X, seletorJ1Y))
+        if (jogadorDaVez == 1)
         {
-            moverPecaLado = 'D';
-            moverPecaAnimacao = true;
+            // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (podeIrPraCimaJ1(seletorJ1X, seletorJ1Y) && podeIrPraDireitaSuperiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            {
+                moverPecaDirecao = 'D';
+                moverPecaAnimacao = true;
+            }
+        }
+        else
+        {
+            // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+            if (podeIrPraCimaJ2(seletorJ2X, seletorJ2Y) && podeIrPraDireitaSuperiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            {
+                moverPecaDirecao = 'D';
+                moverPecaAnimacao = true;
+            }
         }
         break;
     }
@@ -130,39 +183,91 @@ void tecladoSpecial(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_RIGHT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
-        if (4.0f + seletorJ1X < 11.0f)
+        if (jogadorDaVez == 1)
         {
-            seletorJ1X += 1.0f;
-            pecaSelecionada = false;
+            // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (4.0f + seletorJ1X < 11.0f)
+            {
+                seletorJ1X += 1.0f;
+                pecaSelecionada = false;
+            }
+        }
+        else
+        {
+            // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (11.0f + seletorJ2X > 4.0f)
+            {
+                seletorJ2X -= 1.0f;
+                pecaSelecionada = false;
+            }
         }
         break;
     case GLUT_KEY_LEFT:
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
-        if (4.0f + seletorJ1X > 4.0f)
+        if (jogadorDaVez == 1)
         {
-            seletorJ1X -= 1.0f;
-            pecaSelecionada = false;
+            // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (4.0f + seletorJ1X > 4.0f)
+            {
+                seletorJ1X -= 1.0f;
+                pecaSelecionada = false;
+            }
+        }
+        else
+        {
+            // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (11.0f + seletorJ2X < 11.0f)
+            {
+                seletorJ2X += 1.0f;
+                pecaSelecionada = false;
+            }
         }
         break;
     case GLUT_KEY_UP:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8 (CONSULTAR NOTAÇÃO ALGÉBRICA).
-        if (4.0f + seletorJ1Y < 11.0f)
+        if (jogadorDaVez == 1)
         {
-            seletorJ1Y += 1.0f;
-            pecaSelecionada = false;
+            // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8 (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (4.0f + seletorJ1Y < 11.0f)
+            {
+                seletorJ1Y += 1.0f;
+                pecaSelecionada = false;
+            }
+        }
+        else
+        {
+            // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1 (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (11.0f + seletorJ2Y > 4.0f)
+            {
+                seletorJ2Y -= 1.0f;
+                pecaSelecionada = false;
+            }
         }
         break;
     case GLUT_KEY_DOWN:
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
-        // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1 (CONSULTAR NOTAÇÃO ALGÉBRICA).
-        if (4.0f + seletorJ1Y > 4.0f)
+        if (jogadorDaVez == 1)
         {
-            seletorJ1Y -= 1.0f;
-            pecaSelecionada = false;
+            // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1 (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (4.0f + seletorJ1Y > 4.0f)
+            {
+                seletorJ1Y -= 1.0f;
+                pecaSelecionada = false;
+            }
+        }
+        else
+        {
+            // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
+            // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8 (CONSULTAR NOTAÇÃO ALGÉBRICA).
+            if (11.0f + seletorJ2Y < 11.0f)
+            {
+                seletorJ2Y += 1.0f;
+                pecaSelecionada = false;
+            }
         }
         break;
     case GLUT_KEY_F1:
@@ -200,15 +305,24 @@ void desenha()
     baseDeMadeira();
     tabuleiro();
 
-    pecas();
-    seletorDePeca(seletorJ1X, seletorJ1Y, pecaSelecionada);
+    pecasJ1();
+    pecasJ2();
+
+    if (jogadorDaVez == 1)
+    {
+        seletorDePecaJ1(seletorJ1X, seletorJ1Y, pecaSelecionada);
+    }
+    else
+    {
+        seletorDePecaJ2(seletorJ2X, seletorJ2Y, pecaSelecionada);
+    }
 
     // eixos();
 
     glutSwapBuffers();
 }
 
-void moverPeca()
+void moverPecaJ1()
 {
     // PARA SELECIONAR A PEÇA QUE ESTÁ NA MESMA CASA DO SELETOR DE PEÇAS.
     for (int i = 0; i < 12; i++)
@@ -218,22 +332,22 @@ void moverPeca()
             float pecasJ1Y_Destino;
             float pecasJ1X_Destino;
 
-            if (moverPecaLado == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
+            if (moverPecaDirecao == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] - 1.0f;
                 pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
             }
-            else if (moverPecaLado == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
+            else if (moverPecaDirecao == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] - 1.0f;
                 pecasJ1Y_Destino = pecasJ1Y[i] - 1.0f;
             }
-            else if (moverPecaLado == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
+            else if (moverPecaDirecao == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] + 1.0f;
                 pecasJ1Y_Destino = pecasJ1Y[i] + 1.0f;
             }
-            else if (moverPecaLado == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
+            else if (moverPecaDirecao == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
             {
                 pecasJ1X_Destino = pecasJ1X[i] + 1.0f;
                 pecasJ1Y_Destino = pecasJ1Y[i] - 1.0f;
@@ -306,6 +420,104 @@ void moverPeca()
     }
 }
 
+void moverPecaJ2()
+{
+    // PARA SELECIONAR A PEÇA QUE ESTÁ NA MESMA CASA DO SELETOR DE PEÇAS.
+    for (int i = 0; i < 12; i++)
+    {
+        if (11.5f + seletorJ2X == pecasJ2X[i] && 11.5f + seletorJ2Y == pecasJ2Y[i])
+        {
+            float pecasJ2Y_Destino;
+            float pecasJ2X_Destino;
+
+            if (moverPecaDirecao == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
+            {
+                pecasJ2X_Destino = pecasJ2X[i] + 1.0f;
+                pecasJ2Y_Destino = pecasJ2Y[i] - 1.0f;
+            }
+            else if (moverPecaDirecao == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
+            {
+                pecasJ2X_Destino = pecasJ2X[i] + 1.0f;
+                pecasJ2Y_Destino = pecasJ2Y[i] + 1.0f;
+            }
+            else if (moverPecaDirecao == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
+            {
+                pecasJ2X_Destino = pecasJ2X[i] - 1.0f;
+                pecasJ2Y_Destino = pecasJ2Y[i] - 1.0f;
+            }
+            else if (moverPecaDirecao == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
+            {
+                pecasJ2X_Destino = pecasJ2X[i] - 1.0f;
+                pecasJ2Y_Destino = pecasJ2Y[i] + 1.0f;
+            }
+
+            while (pecasJ2Z[i] < 2.0f) // LEVANTAR A PEÇA
+            {
+                pecasJ2Z[i] += 0.025f;
+                desenha();
+            }
+
+            if (pecasJ2X[i] > pecasJ2X_Destino && pecasJ2Y[i] < pecasJ2Y_Destino) // PEÇA IRÁ PARA A ESQUERDA SUPERIOR.
+            {
+                while (pecasJ2X[i] > pecasJ2X_Destino && pecasJ2Y[i] < pecasJ2Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ2X[i] -= 0.01;
+                    pecasJ2Y[i] += 0.01;
+
+                    desenha();
+                }
+            }
+            else if (pecasJ2X[i] > pecasJ2X_Destino && pecasJ2Y[i] > pecasJ2Y_Destino) // PEÇA IRÁ PARA A ESQUERDA INFERIOR.
+            {
+                while (pecasJ2X[i] > pecasJ2X_Destino && pecasJ2Y[i] > pecasJ2Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ2X[i] -= 0.01;
+                    pecasJ2Y[i] -= 0.01;
+
+                    desenha();
+                }
+            }
+            else if (pecasJ2X[i] < pecasJ2X_Destino && pecasJ2Y[i] < pecasJ2Y_Destino) // PEÇA IRÁ PARA DIREITA SUPERIOR.
+            {
+                while (pecasJ2X[i] < pecasJ2X_Destino && pecasJ2Y[i] < pecasJ2Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ2X[i] += 0.01;
+                    pecasJ2Y[i] += 0.01;
+
+                    desenha();
+                }
+            }
+            else if (pecasJ2X[i] < pecasJ2X_Destino && pecasJ2Y[i] > pecasJ2Y_Destino) // PEÇA IRÁ PARA DIREITA INFERIOR.
+            {
+                while (pecasJ2X[i] < pecasJ2X_Destino && pecasJ2Y[i] > pecasJ2Y_Destino) // MOVER ATÉ A CASA SELECIONADA.
+                {
+                    pecasJ2X[i] += 0.01;
+                    pecasJ2Y[i] -= 0.01;
+
+                    desenha();
+                }
+            }
+
+            while (pecasJ2Z[i] > 1.625f) // DESCER A PEÇA.
+            {
+                pecasJ2Z[i] -= 0.025f;
+                desenha();
+            }
+
+            moverCameraAnimacao = true;
+            moverPecaAnimacao = false;
+
+            if (pecasJ2Y_Destino == 4.5f) // 4.5f É A ÚLTIMA CASA DO TABULEIRO DE DAMA PARA O JOGADOR 2.
+            {
+                damasJ2[i] = 1; // TRANSFORMANDO A PEÇA EM DAMA.
+            }
+
+            pecasJ2X[i] = pecasJ2X_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+            pecasJ2Y[i] = pecasJ2Y_Destino; // ISSO NÃO É REDUNDANTE, É NECESSÁRIO PARA PODER MOVER A PEÇA.
+        }
+    }
+}
+
 void moverCamera()
 {
     if (moverCameraAux == 1.0f)
@@ -327,6 +539,9 @@ void moverCamera()
 
     moverCameraAux *= -1.0f;
     moverCameraAnimacao = false;
+
+    jogadorDaVez *= -1;
+    pecaSelecionada = false;
 }
 
 int main(int argc, char **argv)
@@ -358,11 +573,18 @@ void timer(int)
 
     if (moverPecaAnimacao)
     {
-        moverPeca();
+        if (jogadorDaVez == 1)
+        {
+            moverPecaJ1();
+        }
+        else
+        {
+            moverPecaJ2();
+        }
     }
 
-    // if (moverCameraAnimacao)
-    // {
-    //     moverCamera();
-    // }
+    if (moverCameraAnimacao)
+    {
+        moverCamera();
+    }
 }

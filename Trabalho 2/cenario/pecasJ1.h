@@ -15,7 +15,7 @@ extern float pecasJ2Z[12];
 extern int damasJ1[12];
 extern int damasJ2[12];
 
-bool ehUmaDama(float seletorJ1X, float seletorJ1Y)
+bool ehUmaDamaJ1(float seletorJ1X, float seletorJ1Y)
 {
     float posicaoXSeletor = 4.5f + seletorJ1X;
     float posicaoYSeletor = 4.5f + seletorJ1Y;
@@ -34,7 +34,7 @@ bool ehUmaDama(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-bool temPecaNaCasa(float seletorJ1X, float seletorJ1Y)
+bool temPecaNaCasaJ1(float seletorJ1X, float seletorJ1Y)
 {
     float posicaoXSeletor = 4.5f + seletorJ1X;
     float posicaoYSeletor = 4.5f + seletorJ1Y;
@@ -50,7 +50,7 @@ bool temPecaNaCasa(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-bool podeIrPraCima(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraCimaJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PECAS.
     // 11.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 8 (CONSULTAR NOTAÇÃO ALGÉBRICA).
@@ -62,7 +62,7 @@ bool podeIrPraCima(float seletorJ1X, float seletorJ1Y)
     return true;
 }
 
-bool podeIrPraBaixo(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraBaixoJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DO SELETOR DE PEÇAS.
     // 4.0f REPRESENTA A COORDENADA y DO VÉRTICE A3 DE QUALQUER CASA DA LINHA 1.
@@ -74,13 +74,13 @@ bool podeIrPraBaixo(float seletorJ1X, float seletorJ1Y)
     return true;
 }
 
-bool podeIrPraEsquerdaSuperior(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraEsquerdaSuperiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PECAS.
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
     if (4.0f + seletorJ1X > 4.0f) // SE FOR UMA CASA DO TABULEIRO.
     {
-        if (!temPecaNaCasa(seletorJ1X - 1.0f, seletorJ1Y + 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+        if (!temPecaNaCasaJ1(seletorJ1X - 1.0f, seletorJ1Y + 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
         {
             return true;
         }
@@ -89,13 +89,13 @@ bool podeIrPraEsquerdaSuperior(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-bool podeIrPraEsquerdaInferior(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraEsquerdaInferiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PECAS.
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
     if (4.0f + seletorJ1X > 4.0f) // SE FOR UMA CASA DO TABULEIRO.
     {
-        if (!temPecaNaCasa(seletorJ1X - 1.0f, seletorJ1Y - 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+        if (!temPecaNaCasaJ1(seletorJ1X - 1.0f, seletorJ1Y - 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
         {
             return true;
         }
@@ -104,13 +104,13 @@ bool podeIrPraEsquerdaInferior(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-bool podeIrPraDireitaSuperior(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraDireitaSuperiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PECAS.
     // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
     if (4.0f + seletorJ1X < 11.0f) // SE FOR UMA CASA DO TABULEIRO.
     {
-        if (!temPecaNaCasa(seletorJ1X + 1.0f, seletorJ1Y + 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+        if (!temPecaNaCasaJ1(seletorJ1X + 1.0f, seletorJ1Y + 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
         {
             return true;
         }
@@ -119,13 +119,13 @@ bool podeIrPraDireitaSuperior(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-bool podeIrPraDireitaInferior(float seletorJ1X, float seletorJ1Y)
+bool podeIrPraDireitaInferiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DO SELETOR DE PECAS.
     // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
     if (4.0f + seletorJ1X < 11.0f) // SE FOR UMA CASA DO TABULEIRO.
     {
-        if (!temPecaNaCasa(seletorJ1X + 1.0f, seletorJ1Y - 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+        if (!temPecaNaCasaJ1(seletorJ1X + 1.0f, seletorJ1Y - 1.0f)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
         {
             return true;
         }
@@ -134,7 +134,7 @@ bool podeIrPraDireitaInferior(float seletorJ1X, float seletorJ1Y)
     return false;
 }
 
-void opcaoSeletorEsquerdaSuperior(float seletorJ1X, float seletorJ1Y)
+void opcaoSeletorEsquerdaSuperiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     glPushMatrix();
 
@@ -147,7 +147,7 @@ void opcaoSeletorEsquerdaSuperior(float seletorJ1X, float seletorJ1Y)
     glPopMatrix();
 }
 
-void opcaoSeletorEsquerdaInferior(float seletorJ1X, float seletorJ1Y)
+void opcaoSeletorEsquerdaInferiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     glPushMatrix();
 
@@ -160,7 +160,7 @@ void opcaoSeletorEsquerdaInferior(float seletorJ1X, float seletorJ1Y)
     glPopMatrix();
 }
 
-void opcaoSeletorDireitaSuperior(float seletorJ1X, float seletorJ1Y)
+void opcaoSeletorDireitaSuperiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     glPushMatrix();
 
@@ -173,7 +173,7 @@ void opcaoSeletorDireitaSuperior(float seletorJ1X, float seletorJ1Y)
     glPopMatrix();
 }
 
-void opcaoSeletorDireitaInferior(float seletorJ1X, float seletorJ1Y)
+void opcaoSeletorDireitaInferiorJ1(float seletorJ1X, float seletorJ1Y)
 {
     glPushMatrix();
 
@@ -186,7 +186,7 @@ void opcaoSeletorDireitaInferior(float seletorJ1X, float seletorJ1Y)
     glPopMatrix();
 }
 
-void seletorDePeca(float seletorJ1X, float seletorJ1Y, bool pecaSelecionada)
+void seletorDePecaJ1(float seletorJ1X, float seletorJ1Y, bool pecaSelecionada)
 {
     glPushMatrix();
 
@@ -200,33 +200,33 @@ void seletorDePeca(float seletorJ1X, float seletorJ1Y, bool pecaSelecionada)
 
     if (pecaSelecionada)
     {
-        if (temPecaNaCasa(seletorJ1X, seletorJ1Y)) // SE EXISTE UMA PECA NO LOCAL QUE O SELETOR SELECIONOU.
+        if (temPecaNaCasaJ1(seletorJ1X, seletorJ1Y)) // SE EXISTE UMA PECA NO LOCAL QUE O SELETOR SELECIONOU.
         {
-            if (podeIrPraCima(seletorJ1X, seletorJ1Y))
+            if (podeIrPraCimaJ1(seletorJ1X, seletorJ1Y))
             {
-                if (podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y))
+                if (podeIrPraEsquerdaSuperiorJ1(seletorJ1X, seletorJ1Y))
                 {
-                    opcaoSeletorEsquerdaSuperior(seletorJ1X, seletorJ1Y);
+                    opcaoSeletorEsquerdaSuperiorJ1(seletorJ1X, seletorJ1Y);
                 }
 
-                if (podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y))
+                if (podeIrPraDireitaSuperiorJ1(seletorJ1X, seletorJ1Y))
                 {
-                    opcaoSeletorDireitaSuperior(seletorJ1X, seletorJ1Y);
+                    opcaoSeletorDireitaSuperiorJ1(seletorJ1X, seletorJ1Y);
                 }
             }
 
-            if (ehUmaDama(seletorJ1X, seletorJ1Y))
+            if (ehUmaDamaJ1(seletorJ1X, seletorJ1Y))
             {
-                if (podeIrPraBaixo(seletorJ1X, seletorJ1Y))
+                if (podeIrPraBaixoJ1(seletorJ1X, seletorJ1Y))
                 {
-                    if (podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y))
+                    if (podeIrPraEsquerdaInferiorJ1(seletorJ1X, seletorJ1Y))
                     {
-                        opcaoSeletorEsquerdaInferior(seletorJ1X, seletorJ1Y);
+                        opcaoSeletorEsquerdaInferiorJ1(seletorJ1X, seletorJ1Y);
                     }
 
-                    if (podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y))
+                    if (podeIrPraDireitaInferiorJ1(seletorJ1X, seletorJ1Y))
                     {
-                        opcaoSeletorDireitaInferior(seletorJ1X, seletorJ1Y);
+                        opcaoSeletorDireitaInferiorJ1(seletorJ1X, seletorJ1Y);
                     }
                 }
             }
@@ -234,7 +234,7 @@ void seletorDePeca(float seletorJ1X, float seletorJ1Y, bool pecaSelecionada)
     }
 }
 
-void pecas()
+void pecasJ1()
 {
     for (int i = 0; i < 12; i++)
     {
