@@ -5,8 +5,7 @@
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
-#include "cenario/pecasJ1.h"
-#include "cenario/pecasJ2.h"
+#include "cenario/pecas.h"
 
 #include "stdbool.h"
 
@@ -15,9 +14,13 @@ float eyeY = -50.0f;
 float eyeZ = 70.0f;
 
 // PARA MOVIMENTAÇÃO DO SELETOR DE PEÇA.
+float seletorJ1X_pos = 4.5f;
+float seletorJ1Y_pos = 4.5f;
 float seletorJ1X = 0.0f;
 float seletorJ1Y = 0.0f;
 
+float seletorJ2X_pos = 11.5f;
+float seletorJ2Y_pos = 11.5f;
 float seletorJ2X = 0.0f;
 float seletorJ2Y = 0.0f;
 
@@ -97,7 +100,11 @@ void tecladoASCII(unsigned char key, int x, int y)
         if (jogadorDaVez == 1)
         {
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (ehUmaDamaJ1(seletorJ1X, seletorJ1Y) && podeIrPraBaixoJ1(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaInferiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            if (ehUmaDama(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1) &&
+                podeIrPraBaixo(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
+                podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'e';
                 moverPecaAnimacao = true;
@@ -106,7 +113,11 @@ void tecladoASCII(unsigned char key, int x, int y)
         else
         {
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (podeIrPraBaixoJ2(seletorJ2X, seletorJ2Y) && podeIrPraEsquerdaInferiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            if (ehUmaDama(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2) &&
+                podeIrPraBaixo(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
+                podeIrPraEsquerdaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'e';
                 moverPecaAnimacao = true;
@@ -117,7 +128,10 @@ void tecladoASCII(unsigned char key, int x, int y)
         if (jogadorDaVez == 1)
         {
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (podeIrPraCimaJ1(seletorJ1X, seletorJ1Y) && podeIrPraEsquerdaSuperiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            if (podeIrPraCima(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
+                podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'E';
                 moverPecaAnimacao = true;
@@ -126,7 +140,10 @@ void tecladoASCII(unsigned char key, int x, int y)
         else
         {
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (podeIrPraCimaJ2(seletorJ2X, seletorJ2Y) && podeIrPraEsquerdaSuperiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            if (podeIrPraCima(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
+                podeIrPraEsquerdaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'E';
                 moverPecaAnimacao = true;
@@ -136,8 +153,11 @@ void tecladoASCII(unsigned char key, int x, int y)
     case 'd':
         if (jogadorDaVez == 1)
         {
-            // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (ehUmaDamaJ1(seletorJ1X, seletorJ1Y) && podeIrPraBaixoJ1(seletorJ1X, seletorJ1Y) && podeIrPraDireitaInferiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            if (ehUmaDama(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1) &&
+                podeIrPraBaixo(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
+                podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'd';
                 moverPecaAnimacao = true;
@@ -145,8 +165,11 @@ void tecladoASCII(unsigned char key, int x, int y)
         }
         else
         {
-            // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (ehUmaDamaJ2(seletorJ2X, seletorJ2Y) && podeIrPraBaixoJ2(seletorJ2X, seletorJ2Y) && podeIrPraDireitaInferiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            if (ehUmaDama(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2) &&
+                podeIrPraBaixo(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
+                podeIrPraDireitaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'd';
                 moverPecaAnimacao = true;
@@ -157,7 +180,10 @@ void tecladoASCII(unsigned char key, int x, int y)
         if (jogadorDaVez == 1)
         {
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (podeIrPraCimaJ1(seletorJ1X, seletorJ1Y) && podeIrPraDireitaSuperiorJ1(seletorJ1X, seletorJ1Y) && pecaSelecionada && temPecaNaCasaJ1(seletorJ1X, seletorJ1Y))
+            if (podeIrPraCima(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
+                podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'D';
                 moverPecaAnimacao = true;
@@ -166,7 +192,10 @@ void tecladoASCII(unsigned char key, int x, int y)
         else
         {
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-            if (podeIrPraCimaJ2(seletorJ2X, seletorJ2Y) && podeIrPraDireitaSuperiorJ2(seletorJ2X, seletorJ2Y) && pecaSelecionada && temPecaNaCasaJ2(seletorJ2X, seletorJ2Y))
+            if (podeIrPraCima(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
+                podeIrPraDireitaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                pecaSelecionada)
             {
                 moverPecaDirecao = 'D';
                 moverPecaAnimacao = true;
@@ -305,16 +334,15 @@ void desenha()
     baseDeMadeira();
     tabuleiro();
 
-    pecasJ1();
-    pecasJ2();
+    pecas();
 
     if (jogadorDaVez == 1)
     {
-        seletorDePecaJ1(seletorJ1X, seletorJ1Y, pecaSelecionada);
+        seletorDePeca(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1, pecaSelecionada);
     }
     else
     {
-        seletorDePecaJ2(seletorJ2X, seletorJ2Y, pecaSelecionada);
+        seletorDePeca(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2, pecaSelecionada);
     }
 
     // eixos();
