@@ -119,7 +119,7 @@ bool podeIrPraBaixo(float seletorX, float seletorY, float seletorX_pos, float se
 }
 
 bool podeIrPraEsquerdaSuperior(float seletorX, float seletorY, float seletorX_pos, float seletorY_pos,
-                               float pecasX[12], float pecasY[12])
+                               float pecasJ1X[12], float pecasJ1Y[12], float pecasJ2X[12], float pecasJ2Y[12])
 {
     float yA3Casa;
 
@@ -136,7 +136,8 @@ bool podeIrPraEsquerdaSuperior(float seletorX, float seletorY, float seletorX_po
     {
         if ((seletorX_pos - 0.5f) + seletorX > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -146,7 +147,8 @@ bool podeIrPraEsquerdaSuperior(float seletorX, float seletorY, float seletorX_po
     {
         if ((seletorX_pos - 0.5f) + seletorX < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -157,7 +159,7 @@ bool podeIrPraEsquerdaSuperior(float seletorX, float seletorY, float seletorX_po
 }
 
 bool podeIrPraEsquerdaInferior(float seletorX, float seletorY, float seletorX_pos, float seletorY_pos,
-                               float pecasX[12], float pecasY[12])
+                               float pecasJ1X[12], float pecasJ1Y[12], float pecasJ2X[12], float pecasJ2Y[12])
 {
     float yA3Casa;
 
@@ -174,7 +176,8 @@ bool podeIrPraEsquerdaInferior(float seletorX, float seletorY, float seletorX_po
     {
         if ((seletorX_pos - 0.5f) + seletorX > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -184,7 +187,8 @@ bool podeIrPraEsquerdaInferior(float seletorX, float seletorY, float seletorX_po
     {
         if ((seletorX_pos - 0.5f) + seletorX < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -195,7 +199,7 @@ bool podeIrPraEsquerdaInferior(float seletorX, float seletorY, float seletorX_po
 }
 
 bool podeIrPraDireitaSuperior(float seletorX, float seletorY, float seletorX_pos, float seletorY_pos,
-                              float pecasX[12], float pecasY[12])
+                              float pecasJ1X[12], float pecasJ1Y[12], float pecasJ2X[12], float pecasJ2Y[12])
 {
     float yA3Casa;
 
@@ -212,7 +216,8 @@ bool podeIrPraDireitaSuperior(float seletorX, float seletorY, float seletorX_pos
     {
         if ((seletorX_pos - 0.5f) + seletorX < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX + 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -222,7 +227,8 @@ bool podeIrPraDireitaSuperior(float seletorX, float seletorY, float seletorX_pos
     {
         if ((seletorX_pos - 0.5f) + seletorX > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX - 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -233,7 +239,7 @@ bool podeIrPraDireitaSuperior(float seletorX, float seletorY, float seletorX_pos
 }
 
 bool podeIrPraDireitaInferior(float seletorX, float seletorY, float seletorX_pos, float seletorY_pos,
-                              float pecasX[12], float pecasY[12])
+                              float pecasJ1X[12], float pecasJ1Y[12], float pecasJ2X[12], float pecasJ2Y[12])
 {
     float yA3Casa;
 
@@ -250,7 +256,8 @@ bool podeIrPraDireitaInferior(float seletorX, float seletorY, float seletorX_pos
     {
         if ((seletorX_pos - 0.5f) + seletorX < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX + 1.0f, seletorY - 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -260,7 +267,8 @@ bool podeIrPraDireitaInferior(float seletorX, float seletorY, float seletorX_pos
     {
         if ((seletorX_pos - 0.5f) + seletorX > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
         {
-            if (!temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            if (!temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y) &&
+                !temPecaNaCasa(seletorX - 1.0f, seletorY + 1.0f, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 return true;
             }
@@ -407,7 +415,8 @@ void opcaoSeletorDireitaInferior(float seletorX, float seletorY, float seletorX_
 }
 
 void seletorDePeca(float seletorX, float seletorY, float seletorX_pos, float seletorY_pos,
-                   float pecasX[12], float pecasY[12], int damas[12], bool pecaSelecionada)
+                   float pecasJ1X[12], float pecasJ1Y[12], float pecasJ2X[12], float pecasJ2Y[12],
+                   int damas[12], bool pecaSelecionada)
 {
     float somaX;
     float somaY;
@@ -415,12 +424,18 @@ void seletorDePeca(float seletorX, float seletorY, float seletorX_pos, float sel
     int corR;
     int corB;
 
+    bool condicaoTemPecaNaCasa;
+    bool condicaoEhUmaDama;
+
     if (seletorX_pos == 4.5f)
     {
         somaX = 4.5f;
         somaY = 4.5f;
         corR = 0;
         corB = 40;
+
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y);
+        condicaoEhUmaDama = ehUmaDama(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y, damas);
     }
     else if (seletorX_pos == 11.5f)
     {
@@ -428,6 +443,9 @@ void seletorDePeca(float seletorX, float seletorY, float seletorX_pos, float sel
         somaY = 11.5f;
         corR = 40;
         corB = 0;
+
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y);
+        condicaoEhUmaDama = ehUmaDama(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ2X, pecasJ2Y, damas);
     }
 
     glPushMatrix();
@@ -442,31 +460,31 @@ void seletorDePeca(float seletorX, float seletorY, float seletorX_pos, float sel
 
     if (pecaSelecionada)
     {
-        if (temPecaNaCasa(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY)) // SE EXISTE UMA PECA NO LOCAL QUE O SELETOR SELECIONOU.
+        if (condicaoTemPecaNaCasa) // SE EXISTE UMA PECA NO LOCAL QUE O SELETOR SELECIONOU.
         {
             if (podeIrPraCima(seletorX, seletorY, seletorX_pos, seletorY_pos))
             {
-                if (podeIrPraEsquerdaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY))
+                if (podeIrPraEsquerdaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y))
                 {
                     opcaoSeletorEsquerdaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos);
                 }
 
-                if (podeIrPraDireitaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY))
+                if (podeIrPraDireitaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y))
                 {
                     opcaoSeletorDireitaSuperior(seletorX, seletorY, seletorX_pos, seletorY_pos);
                 }
             }
 
-            if (ehUmaDama(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY, damas))
+            if (condicaoEhUmaDama)
             {
                 if (podeIrPraBaixo(seletorX, seletorY, seletorX_pos, seletorY_pos))
                 {
-                    if (podeIrPraEsquerdaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY))
+                    if (podeIrPraEsquerdaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y))
                     {
                         opcaoSeletorEsquerdaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos);
                     }
 
-                    if (podeIrPraDireitaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasX, pecasY))
+                    if (podeIrPraDireitaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y))
                     {
                         opcaoSeletorDireitaInferior(seletorX, seletorY, seletorX_pos, seletorY_pos);
                     }

@@ -102,7 +102,7 @@ void tecladoASCII(unsigned char key, int x, int y)
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (ehUmaDama(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1) &&
                 podeIrPraBaixo(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
-                podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                podeIrPraEsquerdaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
                 pecaSelecionada)
             {
@@ -115,7 +115,7 @@ void tecladoASCII(unsigned char key, int x, int y)
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (ehUmaDama(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2) &&
                 podeIrPraBaixo(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
-                podeIrPraEsquerdaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                podeIrPraEsquerdaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
                 pecaSelecionada)
             {
@@ -129,7 +129,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (podeIrPraCima(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
-                podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                podeIrPraEsquerdaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
                 pecaSelecionada)
             {
@@ -141,7 +141,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (podeIrPraCima(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
-                podeIrPraEsquerdaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                podeIrPraEsquerdaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
                 pecaSelecionada)
             {
@@ -155,7 +155,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             if (ehUmaDama(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1) &&
                 podeIrPraBaixo(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
-                podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                podeIrPraDireitaInferior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
                 pecaSelecionada)
             {
@@ -167,7 +167,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             if (ehUmaDama(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2) &&
                 podeIrPraBaixo(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
-                podeIrPraDireitaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                podeIrPraDireitaInferior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
                 pecaSelecionada)
             {
@@ -181,7 +181,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             // temPecaNaCasaJ1(seletorJ1X, seletorJ1Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (podeIrPraCima(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos) &&
-                podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
+                podeIrPraDireitaSuperior(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y) &&
                 pecaSelecionada)
             {
@@ -193,7 +193,7 @@ void tecladoASCII(unsigned char key, int x, int y)
         {
             // temPecaNaCasaJ2(seletorJ2X, seletorJ2Y) RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
             if (podeIrPraCima(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos) &&
-                podeIrPraDireitaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
+                podeIrPraDireitaSuperior(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y) &&
                 temPecaNaCasa(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y) &&
                 pecaSelecionada)
             {
@@ -338,11 +338,11 @@ void desenha()
 
     if (jogadorDaVez == 1)
     {
-        seletorDePeca(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, damasJ1, pecaSelecionada);
+        seletorDePeca(seletorJ1X, seletorJ1Y, seletorJ1X_pos, seletorJ1Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y, damasJ1, pecaSelecionada);
     }
     else
     {
-        seletorDePeca(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ2X, pecasJ2Y, damasJ2, pecaSelecionada);
+        seletorDePeca(seletorJ2X, seletorJ2Y, seletorJ2X_pos, seletorJ2Y_pos, pecasJ1X, pecasJ1Y, pecasJ2X, pecasJ2Y, damasJ2, pecaSelecionada);
     }
 
     // eixos();
