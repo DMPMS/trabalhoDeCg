@@ -9,7 +9,7 @@
 
 #include "stdbool.h"
 
-float eyeX = 0.0f;
+float eyeX = 8.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
 
@@ -45,8 +45,8 @@ int damas_J1[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUA
 int damas_J2[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUAL A 1, A PEÇA NESSA POSICÃO SERÁ UMA DAMA.
 
 bool pecaEstaSelecionada = true; // PARA AUXILIAR A EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
-bool moverPeca_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
-char moverPeca_direcao;          // PARA DEFINIR QUAL DIREÇÃO A PEÇA DEVE IR.
+bool moverPecaTabuleiro_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
+char moverPecaTabuleiro_direcao;          // PARA DEFINIR QUAL DIREÇÃO A PEÇA DEVE IR.
 
 int jogadorDaVez = 1; // JOGADOR 1 = 1. JOGADOR 2 = -1;
 
@@ -54,6 +54,14 @@ float moverCamera_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MO
 float moverCamera_aux = 1.0f;       // PARA AUXILIAR NA MOVIMENTAÇÃO DA CÂMERA.
 
 bool vaiComerPeca = false; // PARA DEFINIR SE A AÇÃO DE MOVIMENTO DA PEÇA SERÁ PARA COMER UMA PEÇA ADVERSÁRIA.
+
+// PARA INDICAR AONDE A PEÇA VAI FICAR APÓS SER COMIDA.
+float cemiterioX_J1 = 2.5f;
+float cemiterioY_J1 = 1.5f;
+float cemiterioX_J2 = 13.5f;
+float cemiterioY_J2 = 14.5f;
+
+int FPS = 144;
 
 void timer(int);
 
@@ -290,7 +298,7 @@ void desenha()
     glutSwapBuffers();
 }
 
-void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
+void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                float pecas[12][3], int damas[12], bool vaiComerPeca)
 {
     float pecaDestino_aux;
@@ -321,22 +329,22 @@ void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
             float pecasX_destino;
             float pecasY_destino;
 
-            if (moverPeca_direcao == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
+            if (moverPecaTabuleiro_direcao == 'E') // SE A PEÇA VAI PRA ESQUERDA SUPERIOR.
             {
                 pecasX_destino = pecas[i][0] - pecaDestino_aux;
                 pecasY_destino = pecas[i][1] + pecaDestino_aux;
             }
-            else if (moverPeca_direcao == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
+            else if (moverPecaTabuleiro_direcao == 'e') // SE A PEÇA VAI PRA ESQUERDA INFERIOR.
             {
                 pecasX_destino = pecas[i][0] - pecaDestino_aux;
                 pecasY_destino = pecas[i][1] - pecaDestino_aux;
             }
-            else if (moverPeca_direcao == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
+            else if (moverPecaTabuleiro_direcao == 'D') // SE A PEÇA VAI PRA DIREITA SUPERIOR.
             {
                 pecasX_destino = pecas[i][0] + pecaDestino_aux;
                 pecasY_destino = pecas[i][1] + pecaDestino_aux;
             }
-            else if (moverPeca_direcao == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
+            else if (moverPecaTabuleiro_direcao == 'd') // SE A PEÇA VAI PRA DIREITA INFERIOR.
             {
                 pecasX_destino = pecas[i][0] + pecaDestino_aux;
                 pecasY_destino = pecas[i][1] - pecaDestino_aux;
@@ -396,7 +404,7 @@ void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
             }
 
             moverCamera_animacao = true; // ATIVA A ANIMAÇÃO DE MOVIMENTAÇÃO DE CÂMERA.
-            moverPeca_animacao = false;  // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
+            moverPecaTabuleiro_animacao = false;  // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
 
             if ((seletorY == 4.5f && pecasY_destino == 11.5f) || (seletorY == 11.5f && pecasY_destino == 4.5f)) // SE CHEGOU NO TOPO DO TABULEIRO.
             {
@@ -409,15 +417,76 @@ void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
     }
 }
 
-void removerPeca(float pecaX, float pecaY, float pecas[12][3])
+void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
 {
+    float cemiterioX;
+    float cemiterioY;
+
+    if (pecas == pecas_J1) // SE A PEÇA A SER REMOVIDA É DO JOGADOR 1.
+    {
+        cemiterioX = cemiterioX_J1;
+        cemiterioY = cemiterioY_J1;
+    }
+    else if (pecas == pecas_J2) // SE A PEÇA A SER REMOVIDA É DO JOGADOR 2.
+    {
+        cemiterioX = cemiterioX_J2;
+        cemiterioY = cemiterioY_J2;
+    }
+
     for (int i = 0; i < 12; i++)
     {
         if (pecaX == pecas[i][0] && pecaY == pecas[i][1]) // SE É A PEÇA A SER REMOVIDA.
         {
-            pecas[i][0] = 0.0f;
-            pecas[i][1] = 0.0f;
-            pecas[i][2] = 0.0f;
+
+            while (pecas[i][2] < 2.0f) // LEVANTAR A PEÇA.
+            {
+                pecas[i][2] += 0.025f;
+                desenha();
+            }
+
+            if (pecas[i][0] > cemiterioX) // SE O x DO VÉRTICE A3 DA PEÇA A SER REMOVIDA FOR MAIOR QUE O x DA POSIÇÃO QUE ELA DEVE FICAR NO CEMITÉRIO.
+            {
+                while (pecas[i][0] > cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
+                {
+                    pecas[i][0] -= 0.01;
+                    desenha();
+                }
+            }
+            else if (pecas[i][0] < cemiterioX) // SE O x DO VÉRTICE A3 DA DAMA A SER REMOVIDA FOR MENOR QUE O x DA POSIÇÃO QUE ELA DEVE FICAR NO CEMITÉRIO.
+            {
+                while (pecas[i][0] < cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
+                {
+                    pecas[i][0] += 0.01;
+                    desenha();
+                }
+            }
+
+            if (cemiterioY == cemiterioY_J1) // SE A PEÇA A SER REMOVIDA É DO JOGADOR 1.
+            {
+                while (pecas[i][1] > cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
+                {
+                    pecas[i][1] -= 0.01;
+                    desenha();
+                }
+
+                cemiterioX_J1 += 1.0f; // DEFININDO A LOCALIZAÇÃO DA PRÓXIMA POSIÇÃO DO CEMITÉRIO DO JOGADOR 1.
+            }
+            else if (cemiterioY == cemiterioY_J2) // SE A PEÇA A SER REMOVIDA É DO JOGADOR 2.
+            {
+                while (pecas[i][1] < cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
+                {
+                    pecas[i][1] += 0.01;
+                    desenha();
+                }
+
+                cemiterioX_J2 -= 1.0f; // DEFININDO A LOCALIZAÇÃO DA PRÓXIMA 'COVA' DO CEMITÉRIO DO JOGADOR 2.
+            }
+
+            while (pecas[i][2] > 1.0f) // DESCER A PEÇA.
+            {
+                pecas[i][2] -= 0.025f;
+                desenha();
+            }
         }
     }
 }
@@ -425,7 +494,7 @@ void removerPeca(float pecaX, float pecaY, float pecas[12][3])
 void comerPeca(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                float pecasJogador[12][3], float pecasAdversario[12][3], int damas[12])
 {
-    moverPeca(seletorX_aux, seletorY_aux, seletorX, seletorY,
+    moverPecaTabuleiro(seletorX_aux, seletorY_aux, seletorX, seletorY,
               pecasJogador, damas, vaiComerPeca);
 
     float comerX;
@@ -442,21 +511,21 @@ void comerPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
         comerY = -1.0f;
     }
 
-    if (moverPeca_direcao == 'e')
+    if (moverPecaTabuleiro_direcao == 'e')
     {
-        removerPeca(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
+        moverPecaCemiterio(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
     }
-    else if (moverPeca_direcao == 'E')
+    else if (moverPecaTabuleiro_direcao == 'E')
     {
-        removerPeca(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
+        moverPecaCemiterio(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
     }
-    else if (moverPeca_direcao == 'd')
+    else if (moverPecaTabuleiro_direcao == 'd')
     {
-        removerPeca(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
+        moverPecaCemiterio(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
     }
-    else if (moverPeca_direcao == 'D')
+    else if (moverPecaTabuleiro_direcao == 'D')
     {
-        removerPeca(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
+        moverPecaCemiterio(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
     }
 }
 
@@ -494,7 +563,7 @@ int main(int argc, char **argv)
     glutInitWindowSize(720, 720);
     glutCreateWindow("Forza Horizon 6");
 
-    glutTimerFunc(1000 / 144, timer, 0);
+    glutTimerFunc(1000 / FPS, timer, 0);
 
     inicio();
 
@@ -511,9 +580,9 @@ int main(int argc, char **argv)
 void timer(int)
 {
     glutPostRedisplay();
-    glutTimerFunc(1000 / 144, timer, 0);
+    glutTimerFunc(1000 / FPS, timer, 0);
 
-    if (moverPeca_animacao)
+    if (moverPecaTabuleiro_animacao)
     {
         if (jogadorDaVez == 1)
         {
@@ -523,7 +592,7 @@ void timer(int)
             }
             else
             {
-                moverPeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1, vaiComerPeca);
+                moverPecaTabuleiro(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1, vaiComerPeca);
             }
         }
         else
@@ -534,7 +603,7 @@ void timer(int)
             }
             else
             {
-                moverPeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2, vaiComerPeca);
+                moverPecaTabuleiro(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2, vaiComerPeca);
             }
         }
     }

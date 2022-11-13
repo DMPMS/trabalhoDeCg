@@ -10,8 +10,8 @@ extern float pecas_J2[12][3];
 extern int damas_J1[12];
 extern int damas_J2[12];
 
-extern char moverPeca_direcao;
-extern bool moverPeca_animacao;
+extern char moverPecaTabuleiro_direcao;
+extern bool moverPecaTabuleiro_animacao;
 extern bool vaiComerPeca;
 
 bool ehUmaDama(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
@@ -296,33 +296,8 @@ void moverParaEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float sel
         podeMoverParaEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
-        moverPeca_animacao = true;
-        vaiComerPeca = false;
-    }
-}
-
-void moverParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                              float pecas_J1[12][3], float pecas_J2[12][3], bool pecaEstaSelecionada)
-{
-    bool condicaoTemPecaNaCasa;
-
-    if (seletorX == 4.5f)
-    {
-        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1);
-    }
-    else
-    {
-        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J2);
-    }
-
-    // temPecaNaCasa() RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-    if (podeMoverParaCima(seletorX_aux, seletorY_aux, seletorX, seletorY) &&
-        podeMoverParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
-        condicaoTemPecaNaCasa && pecaEstaSelecionada)
-    {
-        moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'E'; // ESQUERDA SUPERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = false;
     }
 }
@@ -350,14 +325,39 @@ void moverParaEsquerdaInferior(float seletorX_aux, float seletorY_aux, float sel
         podeMoverParaEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'e'; // ESQUERDA INFERIOR.
+        moverPecaTabuleiro_animacao = true;
+        vaiComerPeca = false;
+    }
+}
+
+void moverParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
+                              float pecas_J1[12][3], float pecas_J2[12][3], bool pecaEstaSelecionada)
+{
+    bool condicaoTemPecaNaCasa;
+
+    if (seletorX == 4.5f)
+    {
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1);
+    }
+    else
+    {
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J2);
+    }
+
+    // temPecaNaCasa() RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+    if (podeMoverParaCima(seletorX_aux, seletorY_aux, seletorX, seletorY) &&
+        podeMoverParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
+        condicaoTemPecaNaCasa && pecaEstaSelecionada)
+    {
+        moverPecaTabuleiro_direcao = 'D'; // DIREITA SUPERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = false;
     }
 }
 
 void moverParaDireitaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                               float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada)
+                              float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada)
 {
     bool condicaoTemPecaNaCasa;
     bool condicaoEhUmaDama;
@@ -379,8 +379,8 @@ void moverParaDireitaInferior(float seletorX_aux, float seletorY_aux, float sele
         podeMoverParaDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'd'; // DIREITA INFERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'd'; // DIREITA INFERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = false;
     }
 }
@@ -431,52 +431,6 @@ bool podeComerParaEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float
     return false;
 }
 
-bool podeComerParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                                  float pecas_J1[12][3], float pecas_J2[12][3])
-{
-    float yA3Casa;
-
-    if (seletorX == 4.5f)
-    {
-        yA3Casa = 11.0f; // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
-    }
-    else if (seletorX == 11.5f)
-    {
-        yA3Casa = 4.0f; // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
-    }
-
-    if (seletorX == 4.5f) // <
-    {
-        if ((seletorX - 0.5f + 1.0f) + seletorX_aux < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
-        {
-            if (!temPecaNaCasa(seletorX_aux + 2.0f, seletorY_aux + 2.0f, seletorX, seletorY, pecas_J1) &&
-                !temPecaNaCasa(seletorX_aux + 2.0f, seletorY_aux + 2.0f, seletorX, seletorY, pecas_J2)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
-            {
-                if (temPecaNaCasa(seletorX_aux + 1.0f, seletorY_aux + 1.0f, seletorX, seletorY, pecas_J2))
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    else if (seletorX == 11.5f) // >
-    {
-        if ((seletorX - 0.5f - 1.0f) + seletorX_aux > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
-        {
-            if (!temPecaNaCasa(seletorX_aux - 2.0f, seletorY_aux - 2.0f, seletorX, seletorY, pecas_J1) &&
-                !temPecaNaCasa(seletorX_aux - 2.0f, seletorY_aux - 2.0f, seletorX, seletorY, pecas_J2)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
-            {
-                if (temPecaNaCasa(seletorX_aux - 1.0f, seletorY_aux - 1.0f, seletorX, seletorY, pecas_J1))
-                {
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
 bool podeComerParaEsquerdaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                                    float pecas_J1[12][3], float pecas_J2[12][3])
 {
@@ -513,6 +467,52 @@ bool podeComerParaEsquerdaInferior(float seletorX_aux, float seletorY_aux, float
                 !temPecaNaCasa(seletorX_aux + 2.0f, seletorY_aux + 2.0f, seletorX, seletorY, pecas_J2)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
             {
                 if (temPecaNaCasa(seletorX_aux + 1.0f, seletorY_aux + 1.0f, seletorX, seletorY, pecas_J1))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool podeComerParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
+                                  float pecas_J1[12][3], float pecas_J2[12][3])
+{
+    float yA3Casa;
+
+    if (seletorX == 4.5f)
+    {
+        yA3Casa = 11.0f; // 4.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA h (CONSULTAR NOTAÇÃO ALGÉBRICA).
+    }
+    else if (seletorX == 11.5f)
+    {
+        yA3Casa = 4.0f; // 11.0f REPRESENTA A COORDENADA x DO VÉRTICE A3 DE QUALQUER CASA DA COLUNA a (CONSULTAR NOTAÇÃO ALGÉBRICA).
+    }
+
+    if (seletorX == 4.5f) // <
+    {
+        if ((seletorX - 0.5f + 1.0f) + seletorX_aux < yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
+        {
+            if (!temPecaNaCasa(seletorX_aux + 2.0f, seletorY_aux + 2.0f, seletorX, seletorY, pecas_J1) &&
+                !temPecaNaCasa(seletorX_aux + 2.0f, seletorY_aux + 2.0f, seletorX, seletorY, pecas_J2)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            {
+                if (temPecaNaCasa(seletorX_aux + 1.0f, seletorY_aux + 1.0f, seletorX, seletorY, pecas_J2))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    else if (seletorX == 11.5f) // >
+    {
+        if ((seletorX - 0.5f - 1.0f) + seletorX_aux > yA3Casa) // SE FOR UMA CASA DO TABULEIRO.
+        {
+            if (!temPecaNaCasa(seletorX_aux - 2.0f, seletorY_aux - 2.0f, seletorX, seletorY, pecas_J1) &&
+                !temPecaNaCasa(seletorX_aux - 2.0f, seletorY_aux - 2.0f, seletorX, seletorY, pecas_J2)) // SE NÃO EXISTE OUTRA PECA NA OPÇÃO DE MOVIMENTO DA PECA SELECIONADA.
+            {
+                if (temPecaNaCasa(seletorX_aux - 1.0f, seletorY_aux - 1.0f, seletorX, seletorY, pecas_J1))
                 {
                     return true;
                 }
@@ -591,36 +591,8 @@ void comerParaEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float sel
         podeComerParaEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
-        moverPeca_animacao = true;
-        vaiComerPeca = true;
-    }
-}
-
-void comerParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                              float pecas_J1[12][3], float pecas_J2[12][3], bool pecaEstaSelecionada)
-{
-    float comerY;
-    bool condicaoTemPecaNaCasa;
-
-    if (seletorY == 4.5f)
-    {
-        comerY = 1.0f;
-        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1);
-    }
-    else
-    {
-        comerY = -1.0f;
-        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J2);
-    }
-
-    // temPecaNaCasa() RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
-    if (podeMoverParaCima(seletorX_aux, seletorY_aux + comerY, seletorX, seletorY) &&
-        podeComerParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
-        condicaoTemPecaNaCasa && pecaEstaSelecionada)
-    {
-        moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'E'; // ESQUERDA SUPERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = true;
     }
 }
@@ -651,14 +623,42 @@ void comerParaEsquerdaInferior(float seletorX_aux, float seletorY_aux, float sel
         podeComerParaEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'e'; // ESQUERDA INFERIOR.
+        moverPecaTabuleiro_animacao = true;
+        vaiComerPeca = true;
+    }
+}
+
+void comerParaDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
+                              float pecas_J1[12][3], float pecas_J2[12][3], bool pecaEstaSelecionada)
+{
+    float comerY;
+    bool condicaoTemPecaNaCasa;
+
+    if (seletorY == 4.5f)
+    {
+        comerY = 1.0f;
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1);
+    }
+    else
+    {
+        comerY = -1.0f;
+        condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J2);
+    }
+
+    // temPecaNaCasa() RETORNARÁ SE HÁ UMA PEÇA OU NÃO NA MESMA CASA ONDE ESTÁ O SELETOR DE PEÇA.
+    if (podeMoverParaCima(seletorX_aux, seletorY_aux + comerY, seletorX, seletorY) &&
+        podeComerParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
+        condicaoTemPecaNaCasa && pecaEstaSelecionada)
+    {
+        moverPecaTabuleiro_direcao = 'D'; // DIREITA SUPERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = true;
     }
 }
 
 void comerParaDireitaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                               float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada)
+                              float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada)
 {
     float comerY;
     bool condicaoTemPecaNaCasa;
@@ -683,8 +683,8 @@ void comerParaDireitaInferior(float seletorX_aux, float seletorY_aux, float sele
         podeComerParaDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
         condicaoTemPecaNaCasa && pecaEstaSelecionada)
     {
-        moverPeca_direcao = 'd'; // DIREITA INFERIOR.
-        moverPeca_animacao = true;
+        moverPecaTabuleiro_direcao = 'd'; // DIREITA INFERIOR.
+        moverPecaTabuleiro_animacao = true;
         vaiComerPeca = true;
     }
 }
@@ -971,31 +971,25 @@ void pecas()
     // JOGADOR 1
     for (int i = 0; i < 12; i++)
     {
-        if (pecas_J1[i][0] != 0 && pecas_J1[i][1] != 0 && pecas_J1[i][2] != 0)
-        {
-            glPushMatrix();
+        glPushMatrix();
 
-            glTranslatef(pecas_J1[i][0], pecas_J1[i][1], pecas_J1[i][2]);
-            glScalef(0.4f, 0.4f, 0.125f);
-            cilindro(100, 100, 255, 255, GL_FILL);
+        glTranslatef(pecas_J1[i][0], pecas_J1[i][1], pecas_J1[i][2]);
+        glScalef(0.4f, 0.4f, 0.125f);
+        cilindro(100, 100, 255, 255, GL_FILL);
 
-            glPopMatrix();
-        }
+        glPopMatrix();
     }
 
     // JOGADOR 2
     for (int i = 0; i < 12; i++)
     {
-        if (pecas_J2[i][0] != 0 && pecas_J2[i][1] != 0 && pecas_J2[i][2] != 0)
-        {
-            glPushMatrix();
+        glPushMatrix();
 
-            glTranslatef(pecas_J2[i][0], pecas_J2[i][1], pecas_J2[i][2]);
-            glScalef(0.4f, 0.4f, 0.125f);
-            cilindro(255, 100, 100, 255, GL_FILL);
+        glTranslatef(pecas_J2[i][0], pecas_J2[i][1], pecas_J2[i][2]);
+        glScalef(0.4f, 0.4f, 0.125f);
+        cilindro(255, 100, 100, 255, GL_FILL);
 
-            glPopMatrix();
-        }
+        glPopMatrix();
     }
 }
 
