@@ -292,7 +292,7 @@ void desenha()
     projecao();
     camera();
 
-    baseDeMadeira(texID);
+    baseDeMadeira();
     tabuleiro();
 
     pecas();

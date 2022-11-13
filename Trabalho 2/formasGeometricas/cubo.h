@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
+
 void cubo(int corR, int corG, int corB, int corO, int modo, int texId)
 {
     glPolygonMode(GL_FRONT_AND_BACK, modo);
@@ -15,6 +16,7 @@ void cubo(int corR, int corG, int corB, int corO, int modo, int texId)
     float A4[] = {-0.5f, 0.5f, 0.0f};
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, texId);
+
     glBegin(GL_QUADS); // BASE
     glTexCoord2f(0.0, 0.0);    glVertex3f(A1[0], A1[1], A1[2]);
     glTexCoord2f(1.0, 0.0);    glVertex3f(A2[0], A2[1], A2[2]);
