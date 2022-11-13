@@ -53,6 +53,8 @@ int jogadorDaVez = 1; // JOGADOR 1 = 1. JOGADOR 2 = -1;
 float moverCamera_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MOVIMENTAÇÃO DA CÂMERA.
 float moverCamera_aux = 1.0f;       // PARA AUXILIAR NA MOVIMENTAÇÃO DA CÂMERA.
 
+bool vaiComerPeca = false;
+
 void timer(int);
 
 void inicio()
@@ -104,6 +106,17 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (ehUmaDama(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1) &&
+                     podeMoverParaBaixo(seletorX_J1_aux, seletorY_J1_aux - 1.0f, seletorX_J1, seletorY_J1) &&
+                     podeComerParaEsquerdaInferior(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         else
@@ -117,6 +130,17 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (ehUmaDama(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2) &&
+                     podeMoverParaBaixo(seletorX_J2_aux, seletorY_J2_aux + 1.0f, seletorX_J2, seletorY_J2) &&
+                     podeComerParaEsquerdaInferior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'e'; // ESQUERDA INFERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         break;
@@ -131,6 +155,16 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (podeMoverParaCima(seletorX_J1_aux, seletorY_J1_aux + 1.0f, seletorX_J1, seletorY_J1) &&
+                     podeComerParaEsquerdaSuperior(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         else
@@ -143,6 +177,16 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (podeMoverParaCima(seletorX_J2_aux, seletorY_J2_aux - 1.0f, seletorX_J2, seletorY_J2) &&
+                     podeComerParaEsquerdaSuperior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'E'; // ESQUERDA SUPERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         break;
@@ -158,6 +202,17 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'd'; // DIREITA INFERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (ehUmaDama(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1) &&
+                     podeMoverParaBaixo(seletorX_J1_aux, seletorY_J1_aux - 1.0f, seletorX_J1, seletorY_J1) &&
+                     podeComerParaDireitaInferior(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'd'; // DIREITA INFERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         else
@@ -171,6 +226,17 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'd'; // DIREITA INFERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (ehUmaDama(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2) &&
+                     podeMoverParaBaixo(seletorX_J2_aux, seletorY_J2_aux + 1.0f, seletorX_J2, seletorY_J2) &&
+                     podeComerParaDireitaInferior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'd'; // DIREITA INFERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         break;
@@ -185,6 +251,16 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (podeMoverParaCima(seletorX_J1_aux, seletorY_J1_aux + 1.0f, seletorX_J1, seletorY_J1) &&
+                     podeComerParaDireitaSuperior(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         else
@@ -197,6 +273,16 @@ void tecladoASCII(unsigned char key, int x, int y)
             {
                 moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
                 moverPeca_animacao = true;
+                vaiComerPeca = false;
+            }
+            else if (podeMoverParaCima(seletorX_J2_aux, seletorY_J2_aux - 1.0f, seletorX_J2, seletorY_J2) &&
+                     podeComerParaDireitaSuperior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2) &&
+                     temPecaNaCasa(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2) &&
+                     pecaEstaSelecionada)
+            {
+                moverPeca_direcao = 'D'; // DIREITA SUPERIOR.
+                moverPeca_animacao = true;
+                vaiComerPeca = true;
             }
         }
         break;
@@ -349,17 +435,27 @@ void desenha()
 }
 
 void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-               float pecas[12][3], int damas[12])
+               float pecas[12][3], int damas[12], bool vaiComerPeca)
 {
     float pecaDestino_aux;
 
     if (seletorX == 4.5f)
     {
         pecaDestino_aux = 1.0f; // PARA O JOGADOR 1.
+
+        if (vaiComerPeca)
+        {
+            pecaDestino_aux += 1.0f;
+        }
     }
     else if (seletorX == 11.5f)
     {
         pecaDestino_aux = -1.0f; // PARA O JOGADOR 2.
+
+        if (vaiComerPeca)
+        {
+            pecaDestino_aux += -1.0f;
+        }
     }
 
     for (int i = 0; i < 12; i++)
@@ -457,6 +553,57 @@ void moverPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
     }
 }
 
+void removerPeca(float pecaX, float pecaY, float pecas[12][3])
+{
+    for (int i = 0; i < 12; i++)
+    {
+        if (pecaX == pecas[i][0] && pecaY == pecas[i][1]) // SE É A PEÇA A SER REMOVIDA.
+        {
+            pecas[i][0] = 0.0f;
+            pecas[i][1] = 0.0f;
+            pecas[i][2] = 0.0f;
+        }
+    }
+}
+
+void comerPeca(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
+               float pecasJogador[12][3], float pecasAdversario[12][3], int damas[12])
+{
+    moverPeca(seletorX_aux, seletorY_aux, seletorX, seletorY,
+              pecasJogador, damas, vaiComerPeca);
+
+    float comerX;
+    float comerY;
+
+    if (seletorX == 4.5f)
+    {
+        comerX = 1.0f;
+        comerY = 1.0f;
+    }
+    else if (seletorX == 11.5f)
+    {
+        comerX = -1.0f;
+        comerY = -1.0f;
+    }
+
+    if (moverPeca_direcao == 'e')
+    {
+        removerPeca(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
+    }
+    else if (moverPeca_direcao == 'E')
+    {
+        removerPeca(seletorX_aux + seletorX - comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
+    }
+    else if (moverPeca_direcao == 'd')
+    {
+        removerPeca(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX - comerY, pecasAdversario);
+    }
+    else if (moverPeca_direcao == 'D')
+    {
+        removerPeca(seletorX_aux + seletorX + comerX, seletorY_aux + seletorX + comerY, pecasAdversario);
+    }
+}
+
 void moverCamera()
 {
     if (moverCamera_aux == 1.0f)
@@ -514,11 +661,25 @@ void timer(int)
     {
         if (jogadorDaVez == 1)
         {
-            moverPeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1);
+            if (vaiComerPeca)
+            {
+                comerPeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2, damas_J1);
+            }
+            else
+            {
+                moverPeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, damas_J1, vaiComerPeca);
+            }
         }
         else
         {
-            moverPeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2);
+            if (vaiComerPeca)
+            {
+                comerPeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, pecas_J1, damas_J2);
+            }
+            else
+            {
+                moverPeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J2, damas_J2, vaiComerPeca);
+            }
         }
     }
 
