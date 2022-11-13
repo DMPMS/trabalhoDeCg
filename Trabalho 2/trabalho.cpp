@@ -8,6 +8,7 @@
 #include "cenario/pecas.h"
 
 #include "stdbool.h"
+#include "texturas/textura.h"
 
 float eyeX = 8.0f;
 float eyeY = -50.0f;
@@ -63,16 +64,28 @@ float cemiterioY_J2 = 14.5f;
 
 int FPS = 144;
 
+int texID[2];
+Textura tex;
+
 void timer(int);
 
 void inicio()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    glEnable(GL_DEPTH_TEST);
-
     glEnable(GL_BLEND);                                // PARA USAR OPACIDADE.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    //textura 1
+    tex.carregar("images/madeira01.jpeg");
+    texID[0] = tex.get_id();
+    //textura 2
+    tex.carregar("images/madeira02.jpeg");
+    texID[1] = tex.get_id();
+    cout << texID[0] << endl;
+    cout << texID[1] << endl;
+
 }
 
 void tecladoASCII(unsigned char key, int x, int y)
@@ -279,7 +292,7 @@ void desenha()
     projecao();
     camera();
 
-    baseDeMadeira();
+    baseDeMadeira(texID);
     tabuleiro();
 
     pecas();

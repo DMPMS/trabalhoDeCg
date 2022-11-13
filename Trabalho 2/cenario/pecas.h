@@ -726,8 +726,8 @@ void opcaoSeletorEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float 
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL);
-    cubo(0, 0, 0, 150, GL_LINE);
+    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    cubo(0, 0, 0, 150, GL_LINE, 0);
 
     glPopMatrix();
 }
@@ -769,8 +769,8 @@ void opcaoSeletorEsquerdaInferior(float seletorX_aux, float seletorY_aux, float 
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL);
-    cubo(0, 0, 0, 150, GL_LINE);
+    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    cubo(0, 0, 0, 150, GL_LINE, 0);
 
     glPopMatrix();
 }
@@ -812,8 +812,8 @@ void opcaoSeletorDireitaSuperior(float seletorX_aux, float seletorY_aux, float s
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL);
-    cubo(0, 0, 0, 150, GL_LINE);
+    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    cubo(0, 0, 0, 150, GL_LINE, 0);
 
     glPopMatrix();
 }
@@ -855,8 +855,8 @@ void opcaoSeletorDireitaInferior(float seletorX_aux, float seletorY_aux, float s
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL);
-    cubo(0, 0, 0, 150, GL_LINE);
+    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    cubo(0, 0, 0, 150, GL_LINE, 0);
 
     glPopMatrix();
 }
@@ -905,8 +905,8 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
     glTranslatef(0.0f, 0.0f, 0.01f); // PARA FICAR MAIS ALTO QUE AS CASAS DO TABULEIRO.
     glTranslatef(somaX + seletorX_aux, somaY + seletorY_aux, 1.625f);
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL);
-    cubo(0, 0, 0, 150, GL_LINE);
+    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    cubo(0, 0, 0, 150, GL_LINE, 0);
 
     glPopMatrix();
 
