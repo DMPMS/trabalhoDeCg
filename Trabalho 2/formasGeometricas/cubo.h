@@ -2,6 +2,7 @@
 #define CUBO
 
 #include <math.h>
+#include <GL/gl.h>
 
 void cubo(int corR, int corG, int corB, int corO, int modo)
 {

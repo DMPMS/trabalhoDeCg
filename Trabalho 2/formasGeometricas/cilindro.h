@@ -2,6 +2,7 @@
 #define CILINDRO
 
 #include <math.h>
+#include <GL/gl.h>
 
 void circulo(float raio, float altura, float numLados)
 {
