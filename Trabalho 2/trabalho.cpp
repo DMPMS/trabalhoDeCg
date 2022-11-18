@@ -64,7 +64,7 @@ float cemiterioY_J2 = 14.5f;
 
 int FPS = 144;
 
-int texID[2];
+int texID[6];
 Textura tex;
 
 void timer(int);
@@ -77,15 +77,18 @@ void inicio()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
-    //textura 1
-    tex.carregar("images/madeira01.jpeg");
+    //textura casa branca
+    tex.carregar("images/branco2.jpg");
     texID[0] = tex.get_id();
-    //textura 2
-    tex.carregar("images/madeira02.jpeg");
+    //textura casa preta
+    tex.carregar("images/preto2.jpg");
     texID[1] = tex.get_id();
-    cout << texID[0] << endl;
-    cout << texID[1] << endl;
-
+    //textura base tabuleiro
+    tex.carregar("images/baseTabuleiro.jpg");
+    texID[2] = tex.get_id();
+    //textura base da mesa
+    tex.carregar("images/baseDeMadeira.png");
+    texID[3] = tex.get_id();
 }
 
 void tecladoASCII(unsigned char key, int x, int y)
@@ -571,7 +574,7 @@ void moverCamera()
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB| GLUT_DEPTH);
     glutInitWindowPosition(110, 50);
     glutInitWindowSize(720, 720);
     glutCreateWindow("Forza Horizon 6");

@@ -14,7 +14,7 @@ extern char moverPecaTabuleiro_direcao;
 extern bool moverPecaTabuleiro_animacao;
 extern bool vaiComerPeca;
 
-extern int texID[2];
+extern int texID[6];
 
 bool ehUmaDama(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                float pecas[12][3], int damas[12])

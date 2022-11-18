@@ -36,23 +36,23 @@ void cubo(int corR, int corG, int corB, int corO, int modo, int texId)
     glBindTexture(GL_TEXTURE_2D, 0);
 
     float *vertices[] = {A1, A2, A3, A4};
-    // glBindTexture(GL_TEXTURE_2D, texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
     glBegin(GL_QUAD_STRIP); // FACES LATERAIS
 
     for (int i = 0; i < 4; i++)
     {
-        // glTexCoord2f(0.0, 0.0);
+        glTexCoord2f(0.0, 0.0);
         glVertex3f(vertices[i][0], vertices[i][1], vertices[i][2]);
-        // glTexCoord2f(1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
         glVertex3f(vertices[i][0], vertices[i][1], vertices[i][2] + 1.0f);
     }
-    // glTexCoord2f(1.0, 1.0);
+    glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[0][0], vertices[0][1], vertices[0][2]);
-    // glTexCoord2f(0.0, 1.0);
+    glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[0][0], vertices[0][1], vertices[0][2] + 1.0f);
 
     glEnd();
-    // glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 #endif

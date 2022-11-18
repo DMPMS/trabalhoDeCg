@@ -3,7 +3,7 @@
 
 #include "../formasGeometricas/cubo.h"
 
-extern int texID[2];
+extern int texID[6];
 
 void baseTabuleiro()
 {
@@ -12,7 +12,7 @@ void baseTabuleiro()
     glTranslatef(3.0f, 3.0f, 1.0f);
     glScalef(10.0f, 10.0f, 0.5f);
     glTranslatef(0.5f, 0.5f, 0.0f);
-    cubo(0, 255, 255, 255, GL_FILL, texID[0]);
+    cubo(255, 255, 255, 255, GL_FILL, texID[2]);
 
     glPopMatrix();
 }
@@ -37,7 +37,7 @@ void casas()
             glScalef(1.0f, 1.0f, 0.125f);
             glTranslatef(0.5f, 0.5f, 0.0f);
 
-            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, texID[aux]);
+            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, 0);
 
             glPopMatrix();
 
