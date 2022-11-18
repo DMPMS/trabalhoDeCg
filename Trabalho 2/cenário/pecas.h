@@ -16,7 +16,8 @@ extern char moverPecaTabuleiro_direcao;
 extern bool moverPecaTabuleiro_animacao;
 extern bool vaiComerPeca;
 
-Cilindro peca;
+Cilindro peca1;
+Cilindro peca2;
 Cubo quad;
 
 bool ehUmaDama(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
@@ -979,6 +980,9 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
 
 void pecas(Luz &luz)
 {
+    peca1.setCor(255, 0.0, 0.0);
+    peca2.setCor(0.0, 255, 255);
+
     // JOGADOR 1
     for (int i = 0; i < 12; i++)
     {
@@ -986,8 +990,7 @@ void pecas(Luz &luz)
             glTranslatef(pecas_J1[i][0], pecas_J1[i][1], pecas_J1[i][2]);
             glScalef(0.4f, 0.4f, 0.125f);
             // cilindro(100, 100, 255, 255, GL_FILL);
-            peca.desenha(luz);
-            peca.setCor(0, 255, 255);
+            peca1.desenha(luz);
         glPopMatrix();
     }
 
@@ -998,8 +1001,7 @@ void pecas(Luz &luz)
             glTranslatef(pecas_J2[i][0], pecas_J2[i][1], pecas_J2[i][2]);
             glScalef(0.4f, 0.4f, 0.125f);
             // cilindro(255, 100, 100, 255, GL_FILL);
-            peca.desenha(luz);
-            peca.setCor(255, 0, 0);
+            peca2.desenha(luz);
         glPopMatrix();
     }
 }
