@@ -84,10 +84,10 @@ void inicio()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     //textura pecas do jogador 1
-    tex.carregar("images/branco2.jpg");
+    tex.carregar("images/pecas.png");
     pecasJogador1 = tex.get_id();
     //textura pecas do jogador 2
-    tex.carregar("images/branco2.jpg");
+    tex.carregar("images/pecas.png");
     pecasJogador2 = tex.get_id();
     //textura casa branca
     tex.carregar("images/branco2.jpg");
