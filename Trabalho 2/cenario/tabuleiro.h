@@ -1,25 +1,29 @@
 #ifndef TABULEIRO
 #define TABULEIRO
 
-#include "../formasGeometricas/cubo.h"
+#include "../formasGeometricas/cubo2.h"
+#include "../iluminacao/luz.h"
+#include <glm/vec3.hpp>
+
+Cubo casa;
 
 extern int baseDoTabuleiro;
 extern int casasBrancas;
 extern int casasPretas;
 
-void baseTabuleiro()
+void baseTabuleiro(Luz &luz)
 {
     glPushMatrix();
 
     glTranslatef(3.0f, 3.0f, 1.0f);
     glScalef(10.0f, 10.0f, 0.5f);
     glTranslatef(0.5f, 0.5f, 0.0f);
-    cubo(255, 255, 255, 255, GL_FILL, baseDoTabuleiro);
-
+    casa.desenha(luz, baseDoTabuleiro);
+    casa.setCor(30, 30, 30);
     glPopMatrix();
 }
 
-void casas()
+void casas(Luz &luz)
 {
     float x[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
     float y[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
@@ -40,11 +44,12 @@ void casas()
             glTranslatef(0.5f, 0.5f, 0.0f);
 
             if(aux){
-            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, casasBrancas);
+                casa.desenha(luz, casasBrancas);
             }else{
-            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, casasPretas);
+                casa.desenha(luz, casasPretas);
             }
 
+            casa.setCor(corR[aux], corG[aux], corB[aux]);
             glPopMatrix();
 
             aux += -1;
@@ -53,10 +58,10 @@ void casas()
     }
 }
 
-void tabuleiro()
+void tabuleiro(Luz &luz)
 {
-    baseTabuleiro();
-    casas();
+    baseTabuleiro(luz);
+    casas(luz);
 }
 
 #endif

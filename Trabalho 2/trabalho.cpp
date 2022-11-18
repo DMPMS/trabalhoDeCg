@@ -1,6 +1,19 @@
 // DAVI MONTEIRO PEDROSA MOREIRA SALES - 496314
-
+// JAILON WILLIAM BRUNO OLIVEIRA DA SILVA - 499441
+#include <GL/glew.h>
 #include <GL/glut.h>
+
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cmath>
+
+#include "formasGeometricas/cubo2.h"
+#include "formasGeometricas/cilindro2.h"
+#include "iluminacao/luz.h"
 
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
@@ -10,6 +23,16 @@
 #include "stdbool.h"
 #include "texturas/textura.h"
 
+
+using namespace std;
+
+// Iluminacao
+//objetos fonte de luz e piso (grade de quadrados)
+Luz luz(glm::vec3(2,2,2));
+// Grade piso(20);
+unsigned int shaderId;
+
+/////////////////////////////////////
 float eyeX = 8.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
@@ -75,12 +98,84 @@ Textura tex;
 
 void timer(int);
 
+
+//Função escrita em C++ para ler um arquivo e devolve uma string contendo todo seu conteúdo
+char* readFile(string fileName){
+    char *texto = NULL;
+    ifstream arquivo(fileName);
+    string textoArquivo;
+    if(arquivo.is_open()){
+        ostringstream stream;
+        stream << arquivo.rdbuf();
+        textoArquivo = stream.str();
+        texto = new char[textoArquivo.length() + 1];
+        strcpy(texto, textoArquivo.c_str());
+    }
+    else
+        cout << "Arquivo "<< fileName <<" não pode ser aberto" << endl;
+    return texto;
+}
+
+//Função de inicialização de shaders
+void initShaders(){
+    const char *vertexShader   = readFile("iluminacao/vertexShader.vert");   //lendo o arquivo do vertex shader
+    const char *fragmentShader = readFile("iluminacao/fragmentShader.frag"); //lendo o arquivo do fragment shader
+
+    int  sucesso;
+    char mensagemCompilacao[512];
+
+    //Criação do vertex shader
+    unsigned int vsId = glCreateShader(GL_VERTEX_SHADER); //indicando o OpenGL a criação de um vertex shader
+    glShaderSource(vsId, 1, &vertexShader, NULL);         //enviando o código do vertex shader para OpenGL
+    glCompileShader(vsId);                                //pedindo ao OpenGL a compilação desse código
+    glGetShaderiv(vsId, GL_COMPILE_STATUS, &sucesso);     //verificando se ocorreu erro na compilação do shader
+    if(!sucesso){                                         //se o status possuir algum erro
+        //pede ao OpenGL a mensagem de erro gerada na compilação e exibe na tela
+        glGetShaderInfoLog(vsId, 512, NULL, mensagemCompilacao);
+        cout << "Erro de compilacao no vertex shader: \n" << mensagemCompilacao << endl;
+    }
+
+    //Criação do fragment shader (igual ao processo acima, apenas adaptando de vertex para fragment)
+    unsigned int fsId = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fsId, 1, &fragmentShader, NULL);
+    glCompileShader(fsId);
+    glGetShaderiv(fsId, GL_COMPILE_STATUS, &sucesso);
+    if(!sucesso){
+        glGetShaderInfoLog(fsId, 512, NULL, mensagemCompilacao);
+        cout << "Erro de compilacao no fragment shader: \n" << mensagemCompilacao << endl;
+    }
+
+    //Criando o programa de shaders (vertex e fragment shaders precisam ser conectados um ao outro)
+    shaderId = glCreateProgram();   //criando o programa de shaders
+    glAttachShader(shaderId, vsId); //anexando o vertex shader
+    glAttachShader(shaderId, fsId); //anexando o fragment shader
+    glLinkProgram(shaderId);        //linkando os dois shaders
+    glGetProgramiv(shaderId, GL_LINK_STATUS, &sucesso); //verificando se ocorreu erro na ligação dos shaders
+    if(!sucesso) {
+        //pede ao OpenGL a mensagem de erro gerada na ligação e exibe na tela
+        glGetProgramInfoLog(shaderId, 512, NULL, mensagemCompilacao);
+        cout << "Erro de linkagem dos shaders: \n" << mensagemCompilacao << endl;
+    }
+}
+
+
+
 void inicio()
 {
+    GLenum err = glewInit(); //iniciando a biblioteca GLEW (manipuladora de extensões OpenGL)
+    if(err != GLEW_OK){      //se a GLEW não estiver instalada ou não carregada corretamente, mostre uma msg de erro e saia do programa
+        cout << "Erro no carregamento da GLEW" << endl;
+        exit(1);
+    }
+    //caso contrário, mostre a versão da GLEW sendo usada no momento
+    cout << "Usando GLEW " << glewGetString(GLEW_VERSION) << endl;
+
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glEnable(GL_BLEND);                                // PARA USAR OPACIDADE.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
+    initShaders();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     //textura pecas do jogador 1
@@ -108,22 +203,22 @@ void tecladoASCII(unsigned char key, int x, int y)
     // MOVER CÂMERA.
     switch (key)
     {
-    case '7':
+    case 'a':
         eyeX += 3.0f;
         break;
-    case '1':
+    case 'd':
         eyeX -= 3.0f;
         break;
-    case '8':
+    case 'w':
         eyeY += 3.0f;
         break;
-    case '2':
+    case 's':
         eyeY -= 3.0f;
         break;
-    case '9':
+    case 'Z':
         eyeZ += 3.0f;
         break;
-    case '3':
+    case 'z':
         eyeZ -= 3.0f;
         break;
     }
@@ -178,6 +273,8 @@ void tecladoASCII(unsigned char key, int x, int y)
             comerParaDireitaSuperior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, pecaEstaSelecionada);
         }
         break;
+
+        // case 'q': quadrado.mostraLinhasOnOff();  break;
     }
 
     glutPostRedisplay();
@@ -307,18 +404,18 @@ void desenha()
     projecao();
     camera();
 
-    baseDeMadeira();
-    tabuleiro();
+    baseDeMadeira(luz);
+    tabuleiro(luz);
 
-    pecas();
+    pecas(luz);
 
     if (jogadorDaVez == 1)
     {
-        seletorDePeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2, damas_J1, pecaEstaSelecionada);
+        seletorDePeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2, damas_J1, pecaEstaSelecionada, luz);
     }
     else
     {
-        seletorDePeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, damas_J2, pecaEstaSelecionada);
+        seletorDePeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, damas_J2, pecaEstaSelecionada, luz);
     }
 
     // eixos();
@@ -586,13 +683,12 @@ void moverCamera()
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB| GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(110, 50);
     glutInitWindowSize(720, 720);
     glutCreateWindow("Forza Horizon 6");
 
     glutTimerFunc(1000 / FPS, timer, 0);
-
     inicio();
 
     glutDisplayFunc(desenha);
@@ -605,10 +701,12 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void timer(int)
+void timer(int v)
 {
-    glutPostRedisplay();
+
     glutTimerFunc(1000 / FPS, timer, 0);
+    
+    luz.setPosicao(glm::vec3(8, 8, 15));
 
     if (moverPecaTabuleiro_animacao)
     {
@@ -640,4 +738,5 @@ void timer(int)
     {
         moverCamera(); // TROCAR A VISÃO DO TABULEIRO DE DAMAS AO TROCAR A VEZ DO JOGADOR.
     }
+    glutPostRedisplay();
 }
