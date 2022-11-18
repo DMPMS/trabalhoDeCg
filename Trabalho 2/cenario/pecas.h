@@ -14,7 +14,11 @@ extern char moverPecaTabuleiro_direcao;
 extern bool moverPecaTabuleiro_animacao;
 extern bool vaiComerPeca;
 
-extern int texID[6];
+extern int casasBrancas;
+extern int casasPretas;
+
+extern int pecasJogador1;
+extern int pecasJogador2;
 
 bool ehUmaDama(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                float pecas[12][3], int damas[12])
@@ -972,8 +976,8 @@ void pecas()
 
         glTranslatef(pecas_J1[i][0], pecas_J1[i][1], pecas_J1[i][2]);
         glScalef(0.4f, 0.4f, 0.125f);
-        cilindro(100, 100, 255, 255, GL_FILL);
-
+        cilindro(100, 100, 255, 255, GL_FILL, pecasJogador1); 
+  
         glPopMatrix();
     }
 
@@ -984,7 +988,7 @@ void pecas()
 
         glTranslatef(pecas_J2[i][0], pecas_J2[i][1], pecas_J2[i][2]);
         glScalef(0.4f, 0.4f, 0.125f);
-        cilindro(255, 100, 100, 255, GL_FILL);
+        cilindro(255, 100, 100, 255, GL_FILL, pecasJogador2);
 
         glPopMatrix();
     }

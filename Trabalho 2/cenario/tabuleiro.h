@@ -3,7 +3,9 @@
 
 #include "../formasGeometricas/cubo.h"
 
-extern int texID[6];
+extern int baseDoTabuleiro;
+extern int casasBrancas;
+extern int casasPretas;
 
 void baseTabuleiro()
 {
@@ -12,7 +14,7 @@ void baseTabuleiro()
     glTranslatef(3.0f, 3.0f, 1.0f);
     glScalef(10.0f, 10.0f, 0.5f);
     glTranslatef(0.5f, 0.5f, 0.0f);
-    cubo(255, 255, 255, 255, GL_FILL, texID[2]);
+    cubo(255, 255, 255, 255, GL_FILL, baseDoTabuleiro);
 
     glPopMatrix();
 }
@@ -22,9 +24,9 @@ void casas()
     float x[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
     float y[8] = {4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f};
 
-    int corR[2] = {99, 231};
-    int corG[2] = {53, 209};
-    int corB[2] = {28, 133};
+    int corR[2] = {255, 255};
+    int corG[2] = {255, 255};
+    int corB[2] = {255, 255};
 
     bool aux = false;
     for (int i = 0; i < 8; i++)
@@ -37,7 +39,11 @@ void casas()
             glScalef(1.0f, 1.0f, 0.125f);
             glTranslatef(0.5f, 0.5f, 0.0f);
 
-            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, 0);
+            if(aux){
+            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, casasBrancas);
+            }else{
+            cubo(corR[aux], corG[aux], corB[aux], 255, GL_FILL, casasPretas);
+            }
 
             glPopMatrix();
 

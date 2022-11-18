@@ -3,25 +3,31 @@
 
 #include <math.h>
 
-void circulo(float raio, float altura, float numLados)
+
+void circulo(float raio, float altura, float numLados, int texId)
 {
     float anguloDeCadaTriangulo = 2.0 * 3.14 / numLados;
 
+    glBindTexture(GL_TEXTURE_2D, texId);
     glBegin(GL_TRIANGLE_FAN);
 
+    glTexCoord2f(0.0, 0.0);
     glVertex3f(0.0f, 0.0f, altura);
 
     for (int i = 0; i <= numLados; i++)
     {
+        glTexCoord2f(1.0, 0.0);
         glVertex3f(cos(i * anguloDeCadaTriangulo) * raio,
                    sin(i * anguloDeCadaTriangulo) * raio,
                    altura);
     }
 
     glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
-void cilindro(int corR, int corG, int corB, int corO, int modo)
+void cilindro(int corR, int corG, int corB, int corO, int modo, int texId)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -43,9 +49,9 @@ void cilindro(int corR, int corG, int corB, int corO, int modo)
 
     glEnd();
 
-    circulo(1.0f, 1.0f, 360); // TOPO
+    circulo(1.0f, 1.0f, 360, texId); // TOPO
 
-    circulo(1.0f, 0.0f, 360); // BASE
+    circulo(1.0f, 0.0f, 360, texId); // BASE
 }
 
 #endif

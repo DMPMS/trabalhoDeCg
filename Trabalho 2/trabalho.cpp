@@ -64,7 +64,13 @@ float cemiterioY_J2 = 14.5f;
 
 int FPS = 144;
 
-int texID[6];
+int baseDoTabuleiro;
+int baseMadeira;
+int casasBrancas;
+int casasPretas;
+int pecasJogador1;
+int pecasJogador2;
+
 Textura tex;
 
 void timer(int);
@@ -77,18 +83,24 @@ void inicio()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
+    //textura pecas do jogador 1
+    tex.carregar("images/branco2.jpg");
+    pecasJogador1 = tex.get_id();
+    //textura pecas do jogador 2
+    tex.carregar("images/branco2.jpg");
+    pecasJogador2 = tex.get_id();
     //textura casa branca
     tex.carregar("images/branco2.jpg");
-    texID[0] = tex.get_id();
+    casasBrancas = tex.get_id();
     //textura casa preta
     tex.carregar("images/preto2.jpg");
-    texID[1] = tex.get_id();
+    casasPretas = tex.get_id();
     //textura base tabuleiro
-    tex.carregar("images/baseTabuleiro.jpg");
-    texID[2] = tex.get_id();
+    tex.carregar("images/madeira.jpg");
+    baseDoTabuleiro = tex.get_id();
     //textura base da mesa
     tex.carregar("images/baseDeMadeira.png");
-    texID[3] = tex.get_id();
+    baseMadeira = tex.get_id();
 }
 
 void tecladoASCII(unsigned char key, int x, int y)
