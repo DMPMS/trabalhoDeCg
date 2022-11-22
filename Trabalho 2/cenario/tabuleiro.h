@@ -1,7 +1,7 @@
 #ifndef TABULEIRO
 #define TABULEIRO
 
-#include "../formasGeometricas/cubo2.h"
+#include "../formasGeometricas/cubo.h"
 #include "../iluminacao/luz.h"
 #include <glm/vec3.hpp>
 

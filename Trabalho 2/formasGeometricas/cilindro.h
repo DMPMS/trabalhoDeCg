@@ -1,5 +1,5 @@
-#ifndef CILINDRO2
-#define CILINDRO2
+#ifndef CILINDRO
+#define CILINDRO
 
 #include <math.h>
 #include <glm/vec3.hpp>

@@ -1,8 +1,8 @@
 #ifndef PECAS
 #define PECAS
 
-#include "../formasGeometricas/cubo2.h"
-#include "../formasGeometricas/cilindro2.h"
+#include "../formasGeometricas/cubo.h"
+#include "../formasGeometricas/cilindro.h"
 #include "../iluminacao/luz.h"
 #include <glm/vec3.hpp>
 

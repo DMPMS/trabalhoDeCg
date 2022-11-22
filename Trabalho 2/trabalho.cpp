@@ -11,10 +11,9 @@
 #include <string>
 #include <cmath>
 
-#include "formasGeometricas/cubo2.h"
-#include "formasGeometricas/cilindro2.h"
+#include "formasGeometricas/cubo.h"
+#include "formasGeometricas/cilindro.h"
 #include "iluminacao/luz.h"
-
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
@@ -26,8 +25,12 @@
 
 using namespace std;
 
+#include "iluminacao/luz.cpp"
+#include "formasGeometricas/cilindro.cpp"
+#include "formasGeometricas/cubo.cpp"
+#include "texturas/textura.cpp"
 // Iluminacao
-//objetos fonte de luz e piso (grade de quadrados)
+//objetos fonte de luz e piscilindrode quadrados)
 Luz luz(glm::vec3(2,2,2));
 // Grade piso(20);
 unsigned int shaderId;

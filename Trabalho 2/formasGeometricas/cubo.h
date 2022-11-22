@@ -1,5 +1,5 @@
-#ifndef CUBO2
-#define CUBO2
+#ifndef cubo
+#define cubo
 
 #include <math.h>
 #include <glm/vec3.hpp>

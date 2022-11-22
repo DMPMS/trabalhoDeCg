@@ -1,4 +1,4 @@
-#include "cubo2.h"
+#include "cubo.h"
 
 #include <glm/glm.hpp>
 #include <GL/gl.h>
