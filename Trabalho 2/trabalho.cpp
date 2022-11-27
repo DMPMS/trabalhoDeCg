@@ -182,22 +182,22 @@ void inicio()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     //textura pecas do jogador 1
-    tex.carregar("images/pecas.png");
+    tex.carregar("imagens/pecas.jpg");
     pecasJogador1 = tex.get_id();
     //textura pecas do jogador 2
-    tex.carregar("images/pecas.png");
+    tex.carregar("imagens/pecas.jpg");
     pecasJogador2 = tex.get_id();
     //textura casa branca
-    tex.carregar("images/branco2.jpg");
+    tex.carregar("imagens/branco2.jpg");
     casasBrancas = tex.get_id();
     //textura casa preta
-    tex.carregar("images/preto2.jpg");
+    tex.carregar("imagens/preto2.jpg");
     casasPretas = tex.get_id();
     //textura base tabuleiro
-    tex.carregar("images/madeira.jpg");
+    tex.carregar("imagens/madeira.jpg");
     baseDoTabuleiro = tex.get_id();
     //textura base da mesa
-    tex.carregar("images/baseDeMadeira.png");
+    tex.carregar("imagens/baseDeMadeira.jpg");
     baseMadeira = tex.get_id();
 }
 
