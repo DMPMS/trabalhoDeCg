@@ -5,9 +5,9 @@
 #include "../iluminacao/luz.h"
 #include <glm/vec3.hpp>
 
-Cubo base;
+Cubo baseDeMadeira_forma;
 
-extern int baseMadeira;
+extern int baseDeMadeira_textura;
 
 void baseDeMadeira(Luz &luz)
 {
@@ -16,8 +16,8 @@ void baseDeMadeira(Luz &luz)
     glScalef(16.0f, 16.0f, 1.0f);
     glTranslatef(0.5f, 0.5f, 0.0f);
 
-    base.desenha(luz, baseMadeira);
-    base.setCor(255, 255, 255);
+    baseDeMadeira_forma.desenha(luz, baseDeMadeira_textura);
+    baseDeMadeira_forma.setCor(255, 255, 255);
 
     glPopMatrix();
 }

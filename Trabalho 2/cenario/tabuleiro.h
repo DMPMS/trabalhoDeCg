@@ -5,11 +5,13 @@
 #include "../iluminacao/luz.h"
 #include <glm/vec3.hpp>
 
-Cubo casa;
+Cubo baseTabuleiro_forma;
+Cubo casaBranca_forma;
+Cubo casaPreta_forma;
 
-extern int baseDoTabuleiro;
-extern int casasBrancas;
-extern int casasPretas;
+extern int baseTabuleiro_textura;
+extern int casaBranca_textura;
+extern int casaPreta_textura;
 
 void baseTabuleiro(Luz &luz)
 {
@@ -18,8 +20,8 @@ void baseTabuleiro(Luz &luz)
     glTranslatef(3.0f, 3.0f, 1.0f);
     glScalef(10.0f, 10.0f, 0.5f);
     glTranslatef(0.5f, 0.5f, 0.0f);
-    casa.desenha(luz, baseDoTabuleiro);
-    casa.setCor(30, 30, 30);
+    baseTabuleiro_forma.desenha(luz, baseTabuleiro_textura);
+    baseTabuleiro_forma.setCor(255, 255, 255);
     glPopMatrix();
 }
 
@@ -43,13 +45,17 @@ void casas(Luz &luz)
             glScalef(1.0f, 1.0f, 0.125f);
             glTranslatef(0.5f, 0.5f, 0.0f);
 
-            if(aux){
-                casa.desenha(luz, casasBrancas);
-            }else{
-                casa.desenha(luz, casasPretas);
+            if (aux)
+            {
+                casaBranca_forma.desenha(luz, casaBranca_textura);
+                casaBranca_forma.setCor(corR[aux], corG[aux], corB[aux]);
+            }
+            else
+            {
+                casaPreta_forma.desenha(luz, casaPreta_textura);
+                casaPreta_forma.setCor(corR[aux], corG[aux], corB[aux]);
             }
 
-            casa.setCor(corR[aux], corG[aux], corB[aux]);
             glPopMatrix();
 
             aux += -1;

@@ -1,5 +1,7 @@
 // DAVI MONTEIRO PEDROSA MOREIRA SALES - 496314
 // JAILON WILLIAM BRUNO OLIVEIRA DA SILVA - 499441
+// FRANCISCO KEVEN ALMEIDA DA SILVA - 500699
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 
@@ -13,30 +15,27 @@
 
 #include "formasGeometricas/cubo.h"
 #include "formasGeometricas/cilindro.h"
-#include "iluminacao/luz.h"
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
 #include "cenario/pecas.h"
 
+#include "iluminacao/luz.h"
+#include "iluminacao/luz.cpp"
+
 #include "stdbool.h"
 #include "texturas/textura.h"
+#include "texturas/textura.cpp"
 
-
-using namespace std;
-
-#include "iluminacao/luz.cpp"
 #include "formasGeometricas/cilindro.cpp"
 #include "formasGeometricas/cubo.cpp"
-#include "texturas/textura.cpp"
-// Iluminacao
-//objetos fonte de luz e piscilindrode quadrados)
-Luz luz(glm::vec3(2,2,2));
-// Grade piso(20);
+
+Luz luz(glm::vec3(2, 2, 2)); // POSIÇÃO LUZ. REDEFININDO NA FUNÇÃO TIMER.
+
 unsigned int shaderId;
 
 /////////////////////////////////////
-float eyeX = 8.0f;
+float eyeX = 9.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
 
@@ -71,7 +70,7 @@ float pecas_J2[12][3] = {{10.5f, 11.5f, 1.625f}, {8.5f, 11.5f, 1.625f}, {6.5f, 1
 int damas_J1[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUAL A 1, A PEÇA NESSA POSICÃO SERÁ UMA DAMA.
 int damas_J2[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUAL A 1, A PEÇA NESSA POSICÃO SERÁ UMA DAMA.
 
-bool pecaEstaSelecionada = true; // PARA AUXILIAR A EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
+bool pecaEstaSelecionada = true;          // PARA AUXILIAR A EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
 bool moverPecaTabuleiro_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
 char moverPecaTabuleiro_direcao;          // PARA DEFINIR QUAL DIREÇÃO A PEÇA DEVE IR.
 
@@ -88,26 +87,28 @@ float cemiterioY_J1 = 1.5f;
 float cemiterioX_J2 = 13.5f;
 float cemiterioY_J2 = 14.5f;
 
-int FPS = 144;
+int FPS = 60;
 
-int baseDoTabuleiro;
-int baseMadeira;
-int casasBrancas;
-int casasPretas;
-int pecasJogador1;
-int pecasJogador2;
+// PARA OS INDICES DAS TEXTURAS.
+int baseTabuleiro_textura;
+int baseDeMadeira_textura;
+int casaBranca_textura;
+int casaPreta_textura;
+int pecaJogador1_textura;
+int pecaJogador2_textura;
 
 Textura tex;
 
 void timer(int);
 
-
-//Função escrita em C++ para ler um arquivo e devolve uma string contendo todo seu conteúdo
-char* readFile(string fileName){
+// Função escrita em C++ para ler um arquivo e devolve uma string contendo todo seu conteúdo
+char *readFile(string fileName)
+{
     char *texto = NULL;
     ifstream arquivo(fileName);
     string textoArquivo;
-    if(arquivo.is_open()){
+    if (arquivo.is_open())
+    {
         ostringstream stream;
         stream << arquivo.rdbuf();
         textoArquivo = stream.str();
@@ -115,90 +116,94 @@ char* readFile(string fileName){
         strcpy(texto, textoArquivo.c_str());
     }
     else
-        cout << "Arquivo "<< fileName <<" não pode ser aberto" << endl;
+        cout << "Arquivo " << fileName << " não pode ser aberto" << endl;
     return texto;
 }
 
-//Função de inicialização de shaders
-void initShaders(){
-    const char *vertexShader   = readFile("iluminacao/vertexShader.vert");   //lendo o arquivo do vertex shader
-    const char *fragmentShader = readFile("iluminacao/fragmentShader.frag"); //lendo o arquivo do fragment shader
+// Função de inicialização de shaders
+void initShaders()
+{
+    const char *vertexShader = readFile("iluminacao/vertexShader.vert");     // lendo o arquivo do vertex shader
+    const char *fragmentShader = readFile("iluminacao/fragmentShader.frag"); // lendo o arquivo do fragment shader
 
-    int  sucesso;
+    int sucesso;
     char mensagemCompilacao[512];
 
-    //Criação do vertex shader
-    unsigned int vsId = glCreateShader(GL_VERTEX_SHADER); //indicando o OpenGL a criação de um vertex shader
-    glShaderSource(vsId, 1, &vertexShader, NULL);         //enviando o código do vertex shader para OpenGL
-    glCompileShader(vsId);                                //pedindo ao OpenGL a compilação desse código
-    glGetShaderiv(vsId, GL_COMPILE_STATUS, &sucesso);     //verificando se ocorreu erro na compilação do shader
-    if(!sucesso){                                         //se o status possuir algum erro
-        //pede ao OpenGL a mensagem de erro gerada na compilação e exibe na tela
+    // Criação do vertex shader
+    unsigned int vsId = glCreateShader(GL_VERTEX_SHADER); // indicando o OpenGL a criação de um vertex shader
+    glShaderSource(vsId, 1, &vertexShader, NULL);         // enviando o código do vertex shader para OpenGL
+    glCompileShader(vsId);                                // pedindo ao OpenGL a compilação desse código
+    glGetShaderiv(vsId, GL_COMPILE_STATUS, &sucesso);     // verificando se ocorreu erro na compilação do shader
+    if (!sucesso)
+    { // se o status possuir algum erro
+        // pede ao OpenGL a mensagem de erro gerada na compilação e exibe na tela
         glGetShaderInfoLog(vsId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de compilacao no vertex shader: \n" << mensagemCompilacao << endl;
+        cout << "Erro de compilacao no vertex shader: \n"
+             << mensagemCompilacao << endl;
     }
 
-    //Criação do fragment shader (igual ao processo acima, apenas adaptando de vertex para fragment)
+    // Criação do fragment shader (igual ao processo acima, apenas adaptando de vertex para fragment)
     unsigned int fsId = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fsId, 1, &fragmentShader, NULL);
     glCompileShader(fsId);
     glGetShaderiv(fsId, GL_COMPILE_STATUS, &sucesso);
-    if(!sucesso){
+    if (!sucesso)
+    {
         glGetShaderInfoLog(fsId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de compilacao no fragment shader: \n" << mensagemCompilacao << endl;
+        cout << "Erro de compilacao no fragment shader: \n"
+             << mensagemCompilacao << endl;
     }
 
-    //Criando o programa de shaders (vertex e fragment shaders precisam ser conectados um ao outro)
-    shaderId = glCreateProgram();   //criando o programa de shaders
-    glAttachShader(shaderId, vsId); //anexando o vertex shader
-    glAttachShader(shaderId, fsId); //anexando o fragment shader
-    glLinkProgram(shaderId);        //linkando os dois shaders
-    glGetProgramiv(shaderId, GL_LINK_STATUS, &sucesso); //verificando se ocorreu erro na ligação dos shaders
-    if(!sucesso) {
-        //pede ao OpenGL a mensagem de erro gerada na ligação e exibe na tela
+    // Criando o programa de shaders (vertex e fragment shaders precisam ser conectados um ao outro)
+    shaderId = glCreateProgram();                       // criando o programa de shaders
+    glAttachShader(shaderId, vsId);                     // anexando o vertex shader
+    glAttachShader(shaderId, fsId);                     // anexando o fragment shader
+    glLinkProgram(shaderId);                            // linkando os dois shaders
+    glGetProgramiv(shaderId, GL_LINK_STATUS, &sucesso); // verificando se ocorreu erro na ligação dos shaders
+    if (!sucesso)
+    {
+        // pede ao OpenGL a mensagem de erro gerada na ligação e exibe na tela
         glGetProgramInfoLog(shaderId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de linkagem dos shaders: \n" << mensagemCompilacao << endl;
+        cout << "Erro de linkagem dos shaders: \n"
+             << mensagemCompilacao << endl;
     }
 }
 
-
-
 void inicio()
 {
-    GLenum err = glewInit(); //iniciando a biblioteca GLEW (manipuladora de extensões OpenGL)
-    if(err != GLEW_OK){      //se a GLEW não estiver instalada ou não carregada corretamente, mostre uma msg de erro e saia do programa
+    GLenum err = glewInit(); // iniciando a biblioteca GLEW (manipuladora de extensões OpenGL)
+    if (err != GLEW_OK)
+    { // se a GLEW não estiver instalada ou não carregada corretamente, mostre uma msg de erro e saia do programa
         cout << "Erro no carregamento da GLEW" << endl;
         exit(1);
     }
-    //caso contrário, mostre a versão da GLEW sendo usada no momento
+    // caso contrário, mostre a versão da GLEW sendo usada no momento
     cout << "Usando GLEW " << glewGetString(GLEW_VERSION) << endl;
-
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    glEnable(GL_BLEND);                                // PARA USAR OPACIDADE.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
     initShaders();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
-    //textura pecas do jogador 1
+
+    // TEXTURA PECAS JOGADOR 1.
     tex.carregar("imagens/pecas.jpg");
-    pecasJogador1 = tex.get_id();
-    //textura pecas do jogador 2
+    pecaJogador1_textura = tex.get_id();
+    // TEXTURA PECAS JOGADOR 2.
     tex.carregar("imagens/pecas.jpg");
-    pecasJogador2 = tex.get_id();
-    //textura casa branca
+    pecaJogador2_textura = tex.get_id();
+    // TEXTURA CASA BRANCA.
     tex.carregar("imagens/branco2.jpg");
-    casasBrancas = tex.get_id();
-    //textura casa preta
+    casaBranca_textura = tex.get_id();
+    // TEXTURA CASA PRETA.
     tex.carregar("imagens/preto2.jpg");
-    casasPretas = tex.get_id();
-    //textura base tabuleiro
+    casaPreta_textura = tex.get_id();
+    // TEXTURA BASE TABULEIRO.
     tex.carregar("imagens/madeira.jpg");
-    baseDoTabuleiro = tex.get_id();
-    //textura base da mesa
+    baseTabuleiro_textura = tex.get_id();
+    // TEXTURA BASE DA MESA.
     tex.carregar("imagens/baseDeMadeira.jpg");
-    baseMadeira = tex.get_id();
+    baseDeMadeira_textura = tex.get_id();
 }
 
 void tecladoASCII(unsigned char key, int x, int y)
@@ -206,22 +211,22 @@ void tecladoASCII(unsigned char key, int x, int y)
     // MOVER CÂMERA.
     switch (key)
     {
-    case 'a':
+    case '7':
         eyeX += 3.0f;
         break;
-    case 'd':
+    case '1':
         eyeX -= 3.0f;
         break;
-    case 'w':
+    case '8':
         eyeY += 3.0f;
         break;
-    case 's':
+    case '2':
         eyeY -= 3.0f;
         break;
-    case 'Z':
+    case '9':
         eyeZ += 3.0f;
         break;
-    case 'z':
+    case '3':
         eyeZ -= 3.0f;
         break;
     }
@@ -276,8 +281,6 @@ void tecladoASCII(unsigned char key, int x, int y)
             comerParaDireitaSuperior(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, pecaEstaSelecionada);
         }
         break;
-
-        // case 'q': quadrado.mostraLinhasOnOff();  break;
     }
 
     glutPostRedisplay();
@@ -427,7 +430,7 @@ void desenha()
 }
 
 void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-               float pecas[12][3], int damas[12], bool vaiComerPeca)
+                        float pecas[12][3], int damas[12], bool vaiComerPeca)
 {
     float pecaDestino_aux;
 
@@ -480,7 +483,7 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
 
             while (pecas[i][2] < 2.0f) // LEVANTAR A PEÇA
             {
-                pecas[i][2] += 0.025f;
+                pecas[i][2] += 0.1f;
                 desenha();
             }
 
@@ -488,8 +491,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] > pecasX_destino && pecas[i][1] < pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] -= 0.01;
-                    pecas[i][1] += 0.01;
+                    pecas[i][0] -= 0.04;
+                    pecas[i][1] += 0.04;
 
                     desenha();
                 }
@@ -498,8 +501,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] > pecasX_destino && pecas[i][1] > pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] -= 0.01;
-                    pecas[i][1] -= 0.01;
+                    pecas[i][0] -= 0.04;
+                    pecas[i][1] -= 0.04;
 
                     desenha();
                 }
@@ -508,8 +511,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] < pecasX_destino && pecas[i][1] < pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] += 0.01;
-                    pecas[i][1] += 0.01;
+                    pecas[i][0] += 0.04;
+                    pecas[i][1] += 0.04;
 
                     desenha();
                 }
@@ -518,8 +521,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] < pecasX_destino && pecas[i][1] > pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] += 0.01;
-                    pecas[i][1] -= 0.01;
+                    pecas[i][0] += 0.04;
+                    pecas[i][1] -= 0.04;
 
                     desenha();
                 }
@@ -527,12 +530,12 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
 
             while (pecas[i][2] > 1.625f) // DESCER A PEÇA.
             {
-                pecas[i][2] -= 0.025f;
+                pecas[i][2] -= 0.1f;
                 desenha();
             }
 
-            moverCamera_animacao = true; // ATIVA A ANIMAÇÃO DE MOVIMENTAÇÃO DE CÂMERA.
-            moverPecaTabuleiro_animacao = false;  // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
+            moverCamera_animacao = true;         // ATIVA A ANIMAÇÃO DE MOVIMENTAÇÃO DE CÂMERA.
+            moverPecaTabuleiro_animacao = false; // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
 
             if ((seletorY == 4.5f && pecasY_destino == 11.5f) || (seletorY == 11.5f && pecasY_destino == 4.5f)) // SE CHEGOU NO TOPO DO TABULEIRO.
             {
@@ -568,7 +571,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
 
             while (pecas[i][2] < 2.0f) // LEVANTAR A PEÇA.
             {
-                pecas[i][2] += 0.025f;
+                pecas[i][2] += 0.1f;
                 desenha();
             }
 
@@ -576,7 +579,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][0] > cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][0] -= 0.01;
+                    pecas[i][0] -= 0.1;
                     desenha();
                 }
             }
@@ -584,7 +587,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][0] < cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][0] += 0.01;
+                    pecas[i][0] += 0.1;
                     desenha();
                 }
             }
@@ -593,7 +596,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][1] > cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][1] -= 0.01;
+                    pecas[i][1] -= 0.1;
                     desenha();
                 }
 
@@ -603,7 +606,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][1] < cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][1] += 0.01;
+                    pecas[i][1] += 0.1;
                     desenha();
                 }
 
@@ -612,7 +615,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
 
             while (pecas[i][2] > 1.0f) // DESCER A PEÇA.
             {
-                pecas[i][2] -= 0.025f;
+                pecas[i][2] -= 0.1f;
                 desenha();
             }
         }
@@ -623,7 +626,7 @@ void comerPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
                float pecasJogador[12][3], float pecasAdversario[12][3], int damas[12])
 {
     moverPecaTabuleiro(seletorX_aux, seletorY_aux, seletorX, seletorY,
-              pecasJogador, damas, vaiComerPeca);
+                       pecasJogador, damas, vaiComerPeca);
 
     float comerX;
     float comerY;
@@ -689,7 +692,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(110, 50);
     glutInitWindowSize(720, 720);
-    glutCreateWindow("Forza Horizon 6");
+    glutCreateWindow("Dama Diferenciada");
 
     glutTimerFunc(1000 / FPS, timer, 0);
     inicio();
@@ -706,10 +709,9 @@ int main(int argc, char **argv)
 
 void timer(int v)
 {
-
     glutTimerFunc(1000 / FPS, timer, 0);
-    
-    luz.setPosicao(glm::vec3(8, 8, 15));
+
+    luz.setPosicao(glm::vec3(8, 8, 15)); // REDEFININDO POSIÇÃO DA FONTE DE LUZ.
 
     if (moverPecaTabuleiro_animacao)
     {
