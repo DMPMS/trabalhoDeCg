@@ -1,18 +1,44 @@
 // DAVI MONTEIRO PEDROSA MOREIRA SALES - 496314
+// JAILON WILLIAM BRUNO OLIVEIRA DA SILVA - 499441
+// FRANCISCO KEVEN ALMEIDA DA SILVA - 500699
 
+#include <GL/glew.h>
 #include <GL/glut.h>
 
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cmath>
+
+#include "formasGeometricas/cubo.h"
+#include "formasGeometricas/cilindro.h"
 #include "cenario/outros.h"
 #include "cenario/baseDeMadeira.h"
 #include "cenario/tabuleiro.h"
 #include "cenario/pecas.h"
 
+#include "iluminacao/luz.h"
+#include "iluminacao/luz.cpp"
+
 #include "stdbool.h"
 #include "texturas/textura.h"
+#include "texturas/textura.cpp"
 
-float eyeX = 8.0f;
+#include "formasGeometricas/cilindro.cpp"
+#include "formasGeometricas/cubo.cpp"
+
+Luz luz(glm::vec3(0, -3, 5)); // POSIÇÃO LUZ.
+
+unsigned int shaderId;
+
+/////////////////////////////////////
+float eyeX = 9.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
+glm::vec3 eye = glm::vec3(eyeX, eyeY, eyeZ);
 
 // PARA MOVIMENTAÇÃO DO SELETOR DE PEÇA DO JOGADOR 1.
 float seletorX_J1 = 4.5f;     // POSIÇÃO X DO SELETOR AO INICIAR A APLICAÇÃO.
@@ -45,7 +71,7 @@ float pecas_J2[12][3] = {{10.5f, 11.5f, 1.625f}, {8.5f, 11.5f, 1.625f}, {6.5f, 1
 int damas_J1[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUAL A 1, A PEÇA NESSA POSICÃO SERÁ UMA DAMA.
 int damas_J2[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // SE O INDICE FOR IGUAL A 1, A PEÇA NESSA POSICÃO SERÁ UMA DAMA.
 
-bool pecaEstaSelecionada = true; // PARA AUXILIAR A EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
+bool pecaEstaSelecionada = true;          // PARA AUXILIAR A EXIBIR (OU NÃO) AS OPÇÕES DE MOVIMENTO DA PEÇA.
 bool moverPecaTabuleiro_animacao = false; // PARA INICIAR E FINALIZAR ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
 char moverPecaTabuleiro_direcao;          // PARA DEFINIR QUAL DIREÇÃO A PEÇA DEVE IR.
 
@@ -62,14 +88,15 @@ float cemiterioY_J1 = 1.5f;
 float cemiterioX_J2 = 13.5f;
 float cemiterioY_J2 = 14.5f;
 
-int FPS = 144;
+int FPS = 60;
 
-int baseDoTabuleiro;
-int baseMadeira;
-int casasBrancas;
-int casasPretas;
-int pecasJogador1;
-int pecasJogador2;
+// PARA OS INDICES DAS TEXTURAS.
+int baseTabuleiro_textura;
+int baseDeMadeira_textura;
+int casaBranca_textura;
+int casaPreta_textura;
+int pecaJogador1_textura;
+int pecaJogador2_textura;
 
 Textura tex;
 
@@ -77,30 +104,38 @@ void timer(int);
 
 void inicio()
 {
+    GLenum err = glewInit(); // iniciando a biblioteca GLEW (manipuladora de extensões OpenGL)
+    if (err != GLEW_OK)
+    { // se a GLEW não estiver instalada ou não carregada corretamente, mostre uma msg de erro e saia do programa
+        cout << "Erro no carregamento da GLEW" << endl;
+        exit(1);
+    }
+    // caso contrário, mostre a versão da GLEW sendo usada no momento
+    cout << "Usando GLEW " << glewGetString(GLEW_VERSION) << endl;
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    glEnable(GL_BLEND);                                // PARA USAR OPACIDADE.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // PARA USAR OPACIDADE.
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
-    //textura pecas do jogador 1
-    tex.carregar("images/pecas.png");
-    pecasJogador1 = tex.get_id();
-    //textura pecas do jogador 2
-    tex.carregar("images/pecas.png");
-    pecasJogador2 = tex.get_id();
-    //textura casa branca
-    tex.carregar("images/branco2.jpg");
-    casasBrancas = tex.get_id();
-    //textura casa preta
-    tex.carregar("images/preto2.jpg");
-    casasPretas = tex.get_id();
-    //textura base tabuleiro
-    tex.carregar("images/madeira.jpg");
-    baseDoTabuleiro = tex.get_id();
-    //textura base da mesa
-    tex.carregar("images/baseDeMadeira.png");
-    baseMadeira = tex.get_id();
+
+    // TEXTURA PECAS JOGADOR 1.
+    tex.carregar("imagens/pecas.jpg");
+    pecaJogador1_textura = tex.get_id();
+    // TEXTURA PECAS JOGADOR 2.
+    tex.carregar("imagens/pecas.jpg");
+    pecaJogador2_textura = tex.get_id();
+    // TEXTURA CASA BRANCA.
+    tex.carregar("imagens/branco2.jpg");
+    casaBranca_textura = tex.get_id();
+    // TEXTURA CASA PRETA.
+    tex.carregar("imagens/preto2.jpg");
+    casaPreta_textura = tex.get_id();
+    // TEXTURA BASE TABULEIRO.
+    tex.carregar("imagens/madeira.jpg");
+    baseTabuleiro_textura = tex.get_id();
+    // TEXTURA BASE DA MESA.
+    tex.carregar("imagens/baseDeMadeira.jpg");
+    baseDeMadeira_textura = tex.get_id();
 }
 
 void tecladoASCII(unsigned char key, int x, int y)
@@ -307,27 +342,32 @@ void desenha()
     projecao();
     camera();
 
-    baseDeMadeira();
-    tabuleiro();
+    baseDeMadeira(luz);
+    tabuleiro(luz);
 
-    pecas();
+    pecas(luz);
 
     if (jogadorDaVez == 1)
     {
-        seletorDePeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2, damas_J1, pecaEstaSelecionada);
+        seletorDePeca(seletorX_J1_aux, seletorY_J1_aux, seletorX_J1, seletorY_J1, pecas_J1, pecas_J2, damas_J1, pecaEstaSelecionada, luz);
     }
     else
     {
-        seletorDePeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, damas_J2, pecaEstaSelecionada);
+        seletorDePeca(seletorX_J2_aux, seletorY_J2_aux, seletorX_J2, seletorY_J2, pecas_J1, pecas_J2, damas_J2, pecaEstaSelecionada, luz);
     }
 
     // eixos();
+
+    glBegin(GL_POINTS);
+    glColor3ub(255, 255, 0);
+    glVertex3f(luz.getPosicao().x, luz.getPosicao().y, luz.getPosicao().z);
+    glEnd();
 
     glutSwapBuffers();
 }
 
 void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-               float pecas[12][3], int damas[12], bool vaiComerPeca)
+                        float pecas[12][3], int damas[12], bool vaiComerPeca)
 {
     float pecaDestino_aux;
 
@@ -380,7 +420,7 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
 
             while (pecas[i][2] < 2.0f) // LEVANTAR A PEÇA
             {
-                pecas[i][2] += 0.025f;
+                pecas[i][2] += 0.1f;
                 desenha();
             }
 
@@ -388,8 +428,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] > pecasX_destino && pecas[i][1] < pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] -= 0.01;
-                    pecas[i][1] += 0.01;
+                    pecas[i][0] -= 0.04;
+                    pecas[i][1] += 0.04;
 
                     desenha();
                 }
@@ -398,8 +438,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] > pecasX_destino && pecas[i][1] > pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] -= 0.01;
-                    pecas[i][1] -= 0.01;
+                    pecas[i][0] -= 0.04;
+                    pecas[i][1] -= 0.04;
 
                     desenha();
                 }
@@ -408,8 +448,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] < pecasX_destino && pecas[i][1] < pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] += 0.01;
-                    pecas[i][1] += 0.01;
+                    pecas[i][0] += 0.04;
+                    pecas[i][1] += 0.04;
 
                     desenha();
                 }
@@ -418,8 +458,8 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
             {
                 while (pecas[i][0] < pecasX_destino && pecas[i][1] > pecasY_destino) // MOVER ATÉ A CASA SELECIONADA.
                 {
-                    pecas[i][0] += 0.01;
-                    pecas[i][1] -= 0.01;
+                    pecas[i][0] += 0.04;
+                    pecas[i][1] -= 0.04;
 
                     desenha();
                 }
@@ -427,12 +467,12 @@ void moverPecaTabuleiro(float seletorX_aux, float seletorY_aux, float seletorX, 
 
             while (pecas[i][2] > 1.625f) // DESCER A PEÇA.
             {
-                pecas[i][2] -= 0.025f;
+                pecas[i][2] -= 0.1f;
                 desenha();
             }
 
-            moverCamera_animacao = true; // ATIVA A ANIMAÇÃO DE MOVIMENTAÇÃO DE CÂMERA.
-            moverPecaTabuleiro_animacao = false;  // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
+            moverCamera_animacao = true;         // ATIVA A ANIMAÇÃO DE MOVIMENTAÇÃO DE CÂMERA.
+            moverPecaTabuleiro_animacao = false; // DESABILITA A ANIMAÇÃO DE MOVIMENTAÇÃO DA PEÇA.
 
             if ((seletorY == 4.5f && pecasY_destino == 11.5f) || (seletorY == 11.5f && pecasY_destino == 4.5f)) // SE CHEGOU NO TOPO DO TABULEIRO.
             {
@@ -468,7 +508,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
 
             while (pecas[i][2] < 2.0f) // LEVANTAR A PEÇA.
             {
-                pecas[i][2] += 0.025f;
+                pecas[i][2] += 0.1f;
                 desenha();
             }
 
@@ -476,7 +516,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][0] > cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][0] -= 0.01;
+                    pecas[i][0] -= 0.1;
                     desenha();
                 }
             }
@@ -484,7 +524,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][0] < cemiterioX) // MOVER ATÉ O x DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][0] += 0.01;
+                    pecas[i][0] += 0.1;
                     desenha();
                 }
             }
@@ -493,7 +533,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][1] > cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][1] -= 0.01;
+                    pecas[i][1] -= 0.1;
                     desenha();
                 }
 
@@ -503,7 +543,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
             {
                 while (pecas[i][1] < cemiterioY) // MOVER ATÉ O y DA POSIÇÃO NO CEMITÉRIO.
                 {
-                    pecas[i][1] += 0.01;
+                    pecas[i][1] += 0.1;
                     desenha();
                 }
 
@@ -512,7 +552,7 @@ void moverPecaCemiterio(float pecaX, float pecaY, float pecas[12][3])
 
             while (pecas[i][2] > 1.0f) // DESCER A PEÇA.
             {
-                pecas[i][2] -= 0.025f;
+                pecas[i][2] -= 0.1f;
                 desenha();
             }
         }
@@ -523,7 +563,7 @@ void comerPeca(float seletorX_aux, float seletorY_aux, float seletorX, float sel
                float pecasJogador[12][3], float pecasAdversario[12][3], int damas[12])
 {
     moverPecaTabuleiro(seletorX_aux, seletorY_aux, seletorX, seletorY,
-              pecasJogador, damas, vaiComerPeca);
+                       pecasJogador, damas, vaiComerPeca);
 
     float comerX;
     float comerY;
@@ -586,13 +626,12 @@ void moverCamera()
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB| GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_MULTISAMPLE | GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(110, 50);
     glutInitWindowSize(720, 720);
-    glutCreateWindow("Forza Horizon 6");
+    glutCreateWindow("Dama Diferenciada");
 
     glutTimerFunc(1000 / FPS, timer, 0);
-
     inicio();
 
     glutDisplayFunc(desenha);
@@ -605,9 +644,8 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void timer(int)
+void timer(int v)
 {
-    glutPostRedisplay();
     glutTimerFunc(1000 / FPS, timer, 0);
 
     if (moverPecaTabuleiro_animacao)
@@ -640,4 +678,5 @@ void timer(int)
     {
         moverCamera(); // TROCAR A VISÃO DO TABULEIRO DE DAMAS AO TROCAR A VEZ DO JOGADOR.
     }
+    glutPostRedisplay();
 }

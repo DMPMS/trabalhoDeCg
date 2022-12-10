@@ -3,6 +3,8 @@
 
 #include "../formasGeometricas/cubo.h"
 #include "../formasGeometricas/cilindro.h"
+#include "../iluminacao/luz.h"
+#include <glm/vec3.hpp>
 
 extern float pecas_J1[12][3];
 extern float pecas_J2[12][3];
@@ -14,11 +16,15 @@ extern char moverPecaTabuleiro_direcao;
 extern bool moverPecaTabuleiro_animacao;
 extern bool vaiComerPeca;
 
-extern int casasBrancas;
-extern int casasPretas;
+extern int casaBranca_textura;
+extern int casaPreta_textura;
 
-extern int pecasJogador1;
-extern int pecasJogador2;
+extern int pecaJogador1_textura;
+extern int pecaJogador2_textura;
+
+Cilindro pecaJogador1_forma;
+Cilindro pecaJogador2_forma;
+Cubo seletor_forma;
 
 bool ehUmaDama(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
                float pecas[12][3], int damas[12])
@@ -695,26 +701,29 @@ void comerParaDireitaInferior(float seletorX_aux, float seletorY_aux, float sele
     }
 }
 
-void opcaoSeletorEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY)
+void opcaoSeletorEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY, Luz &luz)
 {
     float somaX;
     float somaY;
 
     int corR;
+    int corG;
     int corB;
 
     if (seletorX == 4.5f) // SE É O JOGADOR 1.
     {
         somaX = 3.5f;
         somaY = 5.5f;
-        corR = 0;
-        corB = 40;
+        corR = 40;
+        corG = 0;
+        corB = 0;
     }
     else if (seletorX == 11.5f) // SE É O JOGADOR 2.
     {
         somaX = 12.5f;
         somaY = 10.5f;
-        corR = 40;
+        corR = 0;
+        corG = 40;
         corB = 0;
     }
 
@@ -732,31 +741,35 @@ void opcaoSeletorEsquerdaSuperior(float seletorX_aux, float seletorY_aux, float 
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL, 0);
+    seletor_forma.desenha(luz, baseDeMadeira_textura);
+    seletor_forma.setCor(corR, corG, corB);
 
     glPopMatrix();
 }
 
-void opcaoSeletorEsquerdaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY)
+void opcaoSeletorEsquerdaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY, Luz &luz)
 {
     float somaX;
     float somaY;
 
-    int corR;
+   int corR;
+    int corG;
     int corB;
 
     if (seletorX == 4.5f)
     {
         somaX = 3.5f;
         somaY = 3.5f;
-        corR = 0;
-        corB = 40;
+        corR = 40;
+        corG = 0;
+        corB = 0;
     }
     else if (seletorX == 11.5f)
     {
         somaX = 12.5f;
         somaY = 12.5f;
-        corR = 40;
+        corR = 0;
+        corG = 40;
         corB = 0;
     }
 
@@ -774,31 +787,34 @@ void opcaoSeletorEsquerdaInferior(float seletorX_aux, float seletorY_aux, float 
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL, 0);
-
+    seletor_forma.desenha(luz, 0);
+    seletor_forma.setCor(corR, corG, corB);
     glPopMatrix();
 }
 
-void opcaoSeletorDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY)
+void opcaoSeletorDireitaSuperior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY, Luz &luz)
 {
     float somaX;
     float somaY;
 
     int corR;
+    int corG;
     int corB;
 
     if (seletorX == 4.5f)
     {
         somaX = 5.5f;
         somaY = 5.5f;
-        corR = 0;
-        corB = 40;
+        corR = 40;
+        corG = 0;
+        corB = 0;
     }
     else if (seletorX == 11.5f)
     {
         somaX = 10.5f;
         somaY = 10.5f;
-        corR = 40;
+        corR = 0;
+        corG = 40;
         corB = 0;
     }
 
@@ -816,31 +832,35 @@ void opcaoSeletorDireitaSuperior(float seletorX_aux, float seletorY_aux, float s
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL, 0);
 
+    seletor_forma.desenha(luz, 0);
+    seletor_forma.setCor(corR, corG, corB);
     glPopMatrix();
 }
 
-void opcaoSeletorDireitaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY)
+void opcaoSeletorDireitaInferior(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY, float comerX, float comerY, Luz &luz)
 {
     float somaX;
     float somaY;
 
     int corR;
+    int corG;
     int corB;
 
     if (seletorX == 4.5f)
     {
         somaX = 5.5f;
         somaY = 3.5f;
-        corR = 0;
-        corB = 40;
+        corR = 40;
+        corG = 0;
+        corB = 0;
     }
     else if (seletorX == 11.5f)
     {
         somaX = 10.5f;
         somaY = 12.5f;
-        corR = 40;
+        corR = 0;
+        corG = 40;
         corB = 0;
     }
 
@@ -858,18 +878,19 @@ void opcaoSeletorDireitaInferior(float seletorX_aux, float seletorY_aux, float s
     }
 
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL, 0);
-
+    seletor_forma.desenha(luz, 0);
+    seletor_forma.setCor(corR, corG, corB);
     glPopMatrix();
 }
 
 void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float seletorY,
-                   float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada)
+                   float pecas_J1[12][3], float pecas_J2[12][3], int damas[12], bool pecaEstaSelecionada, Luz &luz)
 {
     float somaX;
     float somaY;
 
-    int corR;
+   int corR;
+    int corG;
     int corB;
 
     bool condicaoTemPecaNaCasa;
@@ -881,8 +902,9 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
     {
         somaX = 4.5f;
         somaY = 4.5f;
-        corR = 0;
-        corB = 40;
+        corR = 40;
+        corG = 0;
+        corB = 0;
 
         condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1);
         condicaoEhUmaDama = ehUmaDama(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, damas);
@@ -893,7 +915,8 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
     {
         somaX = 11.5f;
         somaY = 11.5f;
-        corR = 40;
+        corR = 0;
+        corG = 40;
         corB = 0;
 
         condicaoTemPecaNaCasa = temPecaNaCasa(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J2);
@@ -907,8 +930,8 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
     glTranslatef(0.0f, 0.0f, 0.01f); // PARA FICAR MAIS ALTO QUE AS CASAS DO TABULEIRO.
     glTranslatef(somaX + seletorX_aux, somaY + seletorY_aux, 1.625f);
     glScalef(1.0f, 1.0f, 0.125f);
-    cubo(corR, 0, corB, 150, GL_FILL, 0);
-
+    seletor_forma.desenha(luz, 0);
+    seletor_forma.setCor(corR, corG, corB);
     glPopMatrix();
 
     if (pecaEstaSelecionada)
@@ -919,22 +942,22 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
             {
                 if (podeMoverParaEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2))
                 {
-                    opcaoSeletorEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f);
+                    opcaoSeletorEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f, luz);
                 }
                 else if (podeComerParaEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
                          podeMoverParaCima(seletorX_aux, seletorY_aux + comer_aux, seletorX, seletorY))
                 {
-                    opcaoSeletorEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, -comer_aux, comer_aux);
+                    opcaoSeletorEsquerdaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, -comer_aux, comer_aux, luz);
                 }
 
                 if (podeMoverParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2))
                 {
-                    opcaoSeletorDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f);
+                    opcaoSeletorDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f, luz);
                 }
                 else if (podeComerParaDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
                          podeMoverParaCima(seletorX_aux, seletorY_aux + comer_aux, seletorX, seletorY))
                 {
-                    opcaoSeletorDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, comer_aux, comer_aux);
+                    opcaoSeletorDireitaSuperior(seletorX_aux, seletorY_aux, seletorX, seletorY, comer_aux, comer_aux, luz);
                 }
             }
 
@@ -944,22 +967,22 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
                 {
                     if (podeMoverParaEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2))
                     {
-                        opcaoSeletorEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f);
+                        opcaoSeletorEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f, luz);
                     }
                     else if (podeComerParaEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
                              podeMoverParaBaixo(seletorX_aux, seletorY_aux - comer_aux, seletorX, seletorY))
                     {
-                        opcaoSeletorEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, -comer_aux, -comer_aux);
+                        opcaoSeletorEsquerdaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, -comer_aux, -comer_aux, luz);
                     }
 
                     if (podeMoverParaDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2))
                     {
-                        opcaoSeletorDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f);
+                        opcaoSeletorDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, 0.0f, 0.0f, luz);
                     }
                     else if (podeComerParaDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, pecas_J1, pecas_J2) &&
                              podeMoverParaBaixo(seletorX_aux, seletorY_aux - comer_aux, seletorX, seletorY))
                     {
-                        opcaoSeletorDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, comer_aux, -comer_aux);
+                        opcaoSeletorDireitaInferior(seletorX_aux, seletorY_aux, seletorX, seletorY, comer_aux, -comer_aux, luz);
                     }
                 }
             }
@@ -967,8 +990,11 @@ void seletorDePeca(float seletorX_aux, float seletorY_aux, float seletorX, float
     }
 }
 
-void pecas()
+void pecas(Luz &luz)
 {
+    pecaJogador1_forma.setCor(255, 0.0, 0.0);
+    pecaJogador2_forma.setCor(0.0, 255, 255);
+
     // JOGADOR 1
     for (int i = 0; i < 12; i++)
     {
@@ -976,8 +1002,8 @@ void pecas()
 
         glTranslatef(pecas_J1[i][0], pecas_J1[i][1], pecas_J1[i][2]);
         glScalef(0.4f, 0.4f, 0.125f);
-        cilindro(100, 100, 255, 255, GL_FILL, pecasJogador1); 
   
+        pecaJogador1_forma.desenha(luz, pecaJogador1_textura);
         glPopMatrix();
     }
 
@@ -988,8 +1014,8 @@ void pecas()
 
         glTranslatef(pecas_J2[i][0], pecas_J2[i][1], pecas_J2[i][2]);
         glScalef(0.4f, 0.4f, 0.125f);
-        cilindro(255, 100, 100, 255, GL_FILL, pecasJogador2);
 
+        pecaJogador2_forma.desenha(luz, pecaJogador2_textura);
         glPopMatrix();
     }
 }
