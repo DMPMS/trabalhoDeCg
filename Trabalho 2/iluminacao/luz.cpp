@@ -1,6 +1,7 @@
 #include "luz.h"
 
 #include <glm/glm.hpp>
+#include <math.h>
 
 Luz::Luz(glm::vec3 posicao)
 {
@@ -36,27 +37,33 @@ void Luz::setEspecular(glm::vec3 especular)
 }
 
 // IMPLEMENTAÇÃO ILUMINAÇÃO DE PHONG.
-glm::vec3 Luz::ilumina(glm::vec3 pos, glm::vec3 normal, glm::vec3 color)
+glm::vec3 Luz::ilumina(glm::vec3 P, glm::vec3 normal, glm::vec3 color, glm::vec3 cameraEye)
 {
     glm::vec3 Ia = this->ambiente;
     glm::vec3 Id = this->difusa;
     glm::vec3 Is = this->especular;
 
-    // CÁLCULO DOS VETORES NORMAIS E VETOR QUE APONTA NA DIREÇÃO DA FONTE DE LUZ.
+    // CÁLCULO DO VETOR NORMAL.
     glm::vec3 N = glm::normalize(normal);
-    glm::vec3 L = glm::normalize(posicao - pos);
+    // CÁLCULO DO VETOR QUE APONTA NA DIREÇÃO DA FONTE DE LUZ.
+    glm::vec3 L = glm::normalize(posicao - P);
+    // CÁLCULO DO VETOR DE REFLEXAO EM RELAÇÃO A FONTE DE LUZ.
+    glm::vec3 R = glm::normalize((glm::vec3(2) * glm::max(glm::dot(N, L), 0.0f), N) - L); // 2*(N * L)*N - L
+    // CALCULO DO VETOR V.
+    glm::vec3 V = glm::normalize(cameraEye - P);
 
-    // CÁLCULO DOS COMPONENTES AMBIENTE, DIFUSO E ESPECULAR DE PHONG (SEM ESPECULAR).
-    glm::vec3 Ra = glm::vec3(0.1);
-    glm::vec3 Rd = glm::max(glm::dot(L, N), 0.0f) * color; // color: PROPRIEDADE DIFUSA DO MATERIAL.
-    glm::vec3 Rs = glm::max(glm::dot(L, N), 0.0f) * color; // color: PROPRIEDADE DIFUSA DO MATERIAL.
+    // CÁLCULO DAS REFLEXAO DO AMBIENTE, DIFUSO E ESPECULAR DE PHONG.
+    glm::vec3 Ra = glm::vec3(0.1);                                              // Ra = Ia * Ka
+    glm::vec3 Rd = glm::max(glm::dot(L, N), 0.0f) * color;                      // Rd = Id * Kd * (L * N)
+    glm::vec3 Rs = glm::vec3(pow(glm::max(glm::dot(V, R), 0.0f), 100)) * color; // Rs = Is * Ks * (V * R)°
 
     // MULTIPLICANDO PROPRIEDADES DA FONTE DE LUZ.
-    glm::vec3 ambiente = Ia * Ra;
-    glm::vec3 difusa = Id * Rd;
+    glm::vec3 ambiente =  Ia * Ra;
+    glm::vec3 difusa =    Id * Rd;
+    glm::vec3 especular = Is * Rs;
 
-    // COR FINAL (SEM ESPECULAR).
-    glm::vec3 corFinal = ambiente + difusa;
+    // COR FINAL.
+    glm::vec3 corFinal = ambiente + difusa + especular;
 
     return corFinal;
 }

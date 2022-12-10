@@ -17,7 +17,7 @@ public:
     void setDifusa(glm::vec3 difusa);
     void setEspecular(glm::vec3 especular);
 
-    glm::vec3 ilumina(glm::vec3 pos, glm::vec3 normal, glm::vec3 color);
+    glm::vec3 ilumina(glm::vec3 P, glm::vec3 normal, glm::vec3 color, glm::vec3 cameraEye);
 };
 
 #endif

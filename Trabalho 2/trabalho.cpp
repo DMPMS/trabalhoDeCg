@@ -30,7 +30,7 @@
 #include "formasGeometricas/cilindro.cpp"
 #include "formasGeometricas/cubo.cpp"
 
-Luz luz(glm::vec3(2, 2, 2)); // POSIÇÃO LUZ. REDEFININDO NA FUNÇÃO TIMER.
+Luz luz(glm::vec3(0, -3, 5)); // POSIÇÃO LUZ.
 
 unsigned int shaderId;
 
@@ -38,6 +38,7 @@ unsigned int shaderId;
 float eyeX = 9.0f;
 float eyeY = -50.0f;
 float eyeZ = 70.0f;
+glm::vec3 eye = glm::vec3(eyeX, eyeY, eyeZ);
 
 // PARA MOVIMENTAÇÃO DO SELETOR DE PEÇA DO JOGADOR 1.
 float seletorX_J1 = 4.5f;     // POSIÇÃO X DO SELETOR AO INICIAR A APLICAÇÃO.
@@ -101,74 +102,6 @@ Textura tex;
 
 void timer(int);
 
-// Função escrita em C++ para ler um arquivo e devolve uma string contendo todo seu conteúdo
-char *readFile(string fileName)
-{
-    char *texto = NULL;
-    ifstream arquivo(fileName);
-    string textoArquivo;
-    if (arquivo.is_open())
-    {
-        ostringstream stream;
-        stream << arquivo.rdbuf();
-        textoArquivo = stream.str();
-        texto = new char[textoArquivo.length() + 1];
-        strcpy(texto, textoArquivo.c_str());
-    }
-    else
-        cout << "Arquivo " << fileName << " não pode ser aberto" << endl;
-    return texto;
-}
-
-// Função de inicialização de shaders
-void initShaders()
-{
-    const char *vertexShader = readFile("iluminacao/vertexShader.vert");     // lendo o arquivo do vertex shader
-    const char *fragmentShader = readFile("iluminacao/fragmentShader.frag"); // lendo o arquivo do fragment shader
-
-    int sucesso;
-    char mensagemCompilacao[512];
-
-    // Criação do vertex shader
-    unsigned int vsId = glCreateShader(GL_VERTEX_SHADER); // indicando o OpenGL a criação de um vertex shader
-    glShaderSource(vsId, 1, &vertexShader, NULL);         // enviando o código do vertex shader para OpenGL
-    glCompileShader(vsId);                                // pedindo ao OpenGL a compilação desse código
-    glGetShaderiv(vsId, GL_COMPILE_STATUS, &sucesso);     // verificando se ocorreu erro na compilação do shader
-    if (!sucesso)
-    { // se o status possuir algum erro
-        // pede ao OpenGL a mensagem de erro gerada na compilação e exibe na tela
-        glGetShaderInfoLog(vsId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de compilacao no vertex shader: \n"
-             << mensagemCompilacao << endl;
-    }
-
-    // Criação do fragment shader (igual ao processo acima, apenas adaptando de vertex para fragment)
-    unsigned int fsId = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fsId, 1, &fragmentShader, NULL);
-    glCompileShader(fsId);
-    glGetShaderiv(fsId, GL_COMPILE_STATUS, &sucesso);
-    if (!sucesso)
-    {
-        glGetShaderInfoLog(fsId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de compilacao no fragment shader: \n"
-             << mensagemCompilacao << endl;
-    }
-
-    // Criando o programa de shaders (vertex e fragment shaders precisam ser conectados um ao outro)
-    shaderId = glCreateProgram();                       // criando o programa de shaders
-    glAttachShader(shaderId, vsId);                     // anexando o vertex shader
-    glAttachShader(shaderId, fsId);                     // anexando o fragment shader
-    glLinkProgram(shaderId);                            // linkando os dois shaders
-    glGetProgramiv(shaderId, GL_LINK_STATUS, &sucesso); // verificando se ocorreu erro na ligação dos shaders
-    if (!sucesso)
-    {
-        // pede ao OpenGL a mensagem de erro gerada na ligação e exibe na tela
-        glGetProgramInfoLog(shaderId, 512, NULL, mensagemCompilacao);
-        cout << "Erro de linkagem dos shaders: \n"
-             << mensagemCompilacao << endl;
-    }
-}
-
 void inicio()
 {
     GLenum err = glewInit(); // iniciando a biblioteca GLEW (manipuladora de extensões OpenGL)
@@ -182,7 +115,6 @@ void inicio()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    initShaders();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
 
@@ -425,6 +357,11 @@ void desenha()
     }
 
     // eixos();
+
+    glBegin(GL_POINTS);
+    glColor3ub(255, 255, 0);
+    glVertex3f(luz.getPosicao().x, luz.getPosicao().y, luz.getPosicao().z);
+    glEnd();
 
     glutSwapBuffers();
 }
@@ -710,8 +647,6 @@ int main(int argc, char **argv)
 void timer(int v)
 {
     glutTimerFunc(1000 / FPS, timer, 0);
-
-    luz.setPosicao(glm::vec3(8, 8, 15)); // REDEFININDO POSIÇÃO DA FONTE DE LUZ.
 
     if (moverPecaTabuleiro_animacao)
     {

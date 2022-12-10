@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <GL/gl.h>
 
+extern glm::vec3 eye;
+
 void Cubo::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -15,28 +17,29 @@ void Cubo::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
 
     glm::vec3 P, C;
 
+    // luz.ilumina(posicao da luz, normal da superficie, cor)
     glBindTexture(GL_TEXTURE_2D, texId);
     glBegin(GL_QUADS); // BASE
     P = glm::vec3(A1[0], A1[1], A1[2]);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A2[0], A2[1], A2[2]);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A3[0], A3[1], A3[2]);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A4[0], A4[1], A4[2]);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
@@ -47,25 +50,25 @@ void Cubo::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
     glBindTexture(GL_TEXTURE_2D, texId);
     glBegin(GL_QUADS); // TOPO
     P = glm::vec3(A1[0], A1[1], A1[2] + 1.0);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A2[0], A2[1], A2[2] + 1.0);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A3[0], A3[1], A3[2] + 1.0);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(A4[0], A4[1], A4[2] + 1.0);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
@@ -80,25 +83,25 @@ void Cubo::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
     for (int i = 0; i < 4; i++)
     {
         P = glm::vec3(vertices[i][0], vertices[i][1], vertices[i][2]);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
 
         P = glm::vec3(vertices[i][0], vertices[i][1], vertices[i][2] + 1.0);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
     }
     P = glm::vec3(vertices[0][0], vertices[0][1], vertices[0][2]);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);
 
     P = glm::vec3(vertices[0][0], vertices[0][1], vertices[0][2] + 1.0);
-    C = luz.ilumina(P, glm::normalize(P), cor);
+    C = luz.ilumina(P, glm::normalize(P), cor, eye);
     glColor3ub(C.r, C.g, C.b);
     glTexCoord2f(P.x, P.y);
     glVertex3f(P.x, P.y, P.z);

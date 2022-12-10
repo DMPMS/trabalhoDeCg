@@ -3,6 +3,8 @@
 #include <GL/gl.h>
 #include <glm/glm.hpp>
 
+extern glm::vec3 eye;
+
 void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -18,7 +20,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
     {
         // BASE
         P = glm::vec3(0.0f, 0.0f, 0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -26,7 +28,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos(i * anguloDeCadaTriangulo) * raio,
                       sin(i * anguloDeCadaTriangulo) * raio,
                       0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -34,14 +36,14 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos((i + 1) * anguloDeCadaTriangulo) * raio,
                       sin((i + 1) * anguloDeCadaTriangulo) * raio,
                       0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
 
         // TOPO
         P = glm::vec3(0.0f, 0.0f, 1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -49,7 +51,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos(i * anguloDeCadaTriangulo) * raio,
                       sin(i * anguloDeCadaTriangulo) * raio,
                       1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -57,7 +59,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos((i + 1) * anguloDeCadaTriangulo) * raio,
                       sin((i + 1) * anguloDeCadaTriangulo) * raio,
                       1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -66,7 +68,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos(i * anguloDeCadaTriangulo) * raio,
                       sin(i * anguloDeCadaTriangulo) * raio,
                       0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -74,7 +76,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos((i + 1) * anguloDeCadaTriangulo) * raio,
                       sin((i + 1) * anguloDeCadaTriangulo) * raio,
                       0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -82,7 +84,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos((i + 1) * anguloDeCadaTriangulo) * raio,
                       sin((i + 1) * anguloDeCadaTriangulo) * raio,
                       1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -92,7 +94,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos(i * anguloDeCadaTriangulo) * raio,
                       sin(i * anguloDeCadaTriangulo) * raio,
                       1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -100,7 +102,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos((i + 1) * anguloDeCadaTriangulo) * raio,
                       sin((i + 1) * anguloDeCadaTriangulo) * raio,
                       1.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
@@ -108,7 +110,7 @@ void Cilindro::desenhaGouraud(glm::vec3 cor, Luz &luz, int texId)
         P = glm::vec3(cos(i * anguloDeCadaTriangulo) * raio,
                       sin(i * anguloDeCadaTriangulo) * raio,
                       0.0f);
-        C = luz.ilumina(P, glm::normalize(P), cor);
+        C = luz.ilumina(P, glm::normalize(P), cor, eye);
         glColor3ub(C.r, C.g, C.b);
         glTexCoord2f(P.x, P.y);
         glVertex3f(P.x, P.y, P.z);
